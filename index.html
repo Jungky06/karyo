@@ -56,7 +56,7 @@ h1{font:700 40px/1.05 Sora,Inter,system-ui,sans-serif;letter-spacing:-.02em;marg
 .pill{font-size:14px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--bg);white-space:nowrap}
 .fig{position:relative;height:clamp(230px,34vw,320px);margin:18px 0 14px}
 .fig>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.kn{font:700 15px Sora,Inter,system-ui,sans-serif;fill:var(--ink);text-anchor:middle}
+.kn{font:700 14px Sora,Inter,system-ui,sans-serif;fill:var(--ink);text-anchor:middle}
 .kd{font:600 13px Inter,system-ui,sans-serif;fill:var(--muted);text-anchor:middle}
 .chr{cursor:pointer}
 .chr:focus{outline:none}
@@ -73,10 +73,14 @@ h1{font:700 40px/1.05 Sora,Inter,system-ui,sans-serif;letter-spacing:-.02em;marg
 .btn:disabled{opacity:.6;cursor:default}
 .b1{font-weight:600}
 .b2{font-size:14px;opacity:.85}
+.grp{margin:36px 0 6px}
+.grp:first-child{margin-top:0}
+.grp h2{font:700 28px/1.1 Sora,Inter,system-ui,sans-serif;letter-spacing:-.01em;color:var(--hema);margin:0}
+.grp p{margin:4px 0 0;color:var(--muted);font-size:16px;max-width:60ch}
 .unit{padding-block:18px;border-top:1px solid var(--line)}
-.unit:first-child{border-top:0;padding-top:0}
-.unit h2{font:700 22px/1.2 Sora,Inter,system-ui,sans-serif;margin:0 0 12px;display:flex;gap:10px;align-items:center}
-.un{flex:none;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--field);color:var(--hema);font-size:15px}
+.unit.lead{border-top:0}
+.unit h3{font:700 20px/1.2 Sora,Inter,system-ui,sans-serif;margin:0 0 12px;display:flex;gap:10px;align-items:center}
+.un{flex:none;display:inline-grid;place-items:center;min-width:34px;height:32px;padding:0 6px;border-radius:16px;background:var(--field);color:var(--hema);font-size:15px}
 .lgrid{display:grid;gap:10px}
 .lcard{text-align:left;display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer}
 .lcard:hover{border-color:var(--ink2)}
@@ -143,9 +147,9 @@ h1{font:700 40px/1.05 Sora,Inter,system-ui,sans-serif;letter-spacing:-.02em;marg
     <div class="hrow">
       <div>
         <h1>Karyo</h1>
-        <p class="lede">College biology in short lessons. Finish one to stain its band on the chromosomes below.</p>
+        <p class="lede">Biology and biochemistry in short lessons, from pre-university foundations (F1–F3) to university level (1–5). Finish a lesson to stain its band.</p>
       </div>
-      <div class="stats"><span class="pill" id="st-streak">0-day streak</span><span class="pill" id="st-xp">0 XP</span><span class="pill" id="st-done">0 of 15 bands</span></div>
+      <div class="stats"><span class="pill" id="st-streak">0-day streak</span><span class="pill" id="st-xp">0 XP</span><span class="pill" id="st-done">0 of 24 bands</span></div>
     </div>
     <div class="fig"><svg id="karyo" role="group" aria-label="Progress: one chromosome per unit, one band per lesson"></svg></div>
     <div class="ctas" id="ctas">
@@ -173,8 +177,129 @@ h1{font:700 40px/1.05 Sora,Inter,system-ui,sans-serif;letter-spacing:-.02em;marg
 <script>
 {
 const U=[
-{name:"Molecular biology",short:"Molecular",ls:[
-{t:"DNA structure and replication",cards:[
+{name:"Chemistry of life",short:"Chemistry",tag:"F1",f:1,ls:[
+{id:"water",t:"Atoms, bonds and water",cards:[
+["Elements of life","About 96% of your body mass is four elements: oxygen, carbon, hydrogen and nitrogen. Phosphorus and sulfur matter too, in DNA, ATP and some amino acids. Carbon is the backbone of biology because it forms four stable covalent bonds, making chains, rings and branches."],
+["Three kinds of bond","Covalent bonds share pairs of electrons and are strong. Ionic bonds hold oppositely charged ions together, like Na⁺ and Cl⁻ in salt. Hydrogen bonds are weak attractions between a slightly positive H and a slightly negative O or N. One is weak, but thousands together hold DNA strands and protein shapes in place."],
+["Why water is special","Oxygen pulls electrons harder than hydrogen does, so water is polar and its molecules hydrogen-bond to each other. That gives water a high specific heat (it resists temperature change), cohesion (surface tension, water pulled up xylem), and the power to dissolve ions and polar molecules. Ice is less dense than liquid water, so ponds freeze from the top down."],
+["Acids, bases and pH","pH = −log[H⁺]. Each step on the scale is a tenfold change, so pH 4 has 10 times more H⁺ than pH 5. Pure water is pH 7. Human blood is held near 7.4 by buffers such as the bicarbonate system, which take up or release H⁺."]],
+qs:[
+{k:"mcq",q:"Which bonds hold the two strands of a DNA double helix together?",o:["Hydrogen bonds between bases","Covalent bonds between bases","Ionic bonds between phosphates","Peptide bonds"],e:"Strong covalent bonds hold each strand together. Weaker hydrogen bonds pair the bases across the strands, which is why the strands can be pulled apart."},
+{k:"mcq",q:"Water dissolves salts well mainly because…",o:["Its molecules are polar","It has a low specific heat","Ice is less dense than liquid water","It forms covalent bonds with ions"],e:"The slightly negative O faces positive ions and the slightly positive H faces negative ions, wrapping each ion in a shell of water."},
+{k:"num",q:"Solution A is pH 3 and solution B is pH 6. How many times more H⁺ does A have?",a:1000,tol:0.01,unit:"times",show:"1000 times",e:"Three pH units: 10 × 10 × 10 = 1000."},
+{k:"tf",q:"Ice floats because hydrogen bonds hold its molecules further apart than in liquid water.",a:true,e:"Ice forms an open lattice. This insulates the water below, so aquatic life survives winter."},
+{k:"mcq",q:"Sweating cools you mainly because water…",o:["Takes in a lot of heat as it evaporates","Is a good solvent","Has strong cohesion","Is less dense when cold"],e:"Hydrogen bonds must break for water to evaporate, and the energy for that comes from your skin."},
+{k:"num",q:"How many covalent bonds does a carbon atom usually form?",a:4,tol:0.01,unit:"bonds",show:"4",e:"Four bonds let carbon build long chains, rings and branches, the skeletons of all biological molecules."},
+{k:"mcq",q:"A buffer is a substance that…",o:["Resists pH changes by taking up or releasing H⁺","Always makes a solution neutral","Speeds up reactions","Raises the boiling point of water"],e:"Bicarbonate (HCO₃⁻) mops up extra H⁺ in blood, and carbonic acid releases H⁺ when it runs low."}]},
+{id:"carbs",t:"Carbohydrates and lipids",cards:[
+["Sugars","Monosaccharides are single sugars: glucose, fructose and galactose (all C₆H₁₂O₆), and ribose, which has five carbons. Two joined by a glycosidic bond make a disaccharide. Glucose + glucose gives maltose, glucose + fructose gives sucrose, and glucose + galactose gives lactose."],
+["Condensation and hydrolysis","Building a polymer releases one water molecule for each bond made: a condensation reaction. Breaking a bond by adding water is hydrolysis. These same two reactions build and break carbohydrates, proteins and nucleic acids."],
+["Polysaccharides","Starch (amylose and amylopectin) stores glucose in plants. Glycogen, which is more branched, stores it in animal liver and muscle. Both are made of α-glucose. Cellulose is made of β-glucose, which forms straight chains that bundle into strong fibres for plant cell walls. Humans can't digest it."],
+["Lipids","A triglyceride is one glycerol joined to three fatty acids by ester bonds, and it stores about twice the energy per gram of a carbohydrate. Saturated fatty acids have no C=C double bonds and pack tightly (solid fats); unsaturated ones have kinks (oils). A phospholipid swaps one fatty acid for a phosphate head, giving a water-loving head and water-fearing tails, which is why phospholipids form bilayers."]],
+qs:[
+{k:"mcq",q:"Sucrose, table sugar, is made of…",o:["Glucose and fructose","Two glucose molecules","Glucose and galactose","Fructose and galactose"],e:"Two glucose make maltose; glucose and galactose make lactose, the sugar in milk."},
+{k:"mcq",q:"Joining two glucose molecules into maltose is a…",o:["Condensation reaction that releases water","Hydrolysis reaction that uses water","Redox reaction","Phosphorylation"],e:"A glycosidic bond forms and one H₂O is released. Digestion runs the reverse, hydrolysis."},
+{k:"num",q:"How many water molecules are released when one triglyceride is made from glycerol and three fatty acids?",a:3,tol:0.01,unit:"H₂O",show:"3",e:"One ester bond forms per fatty acid, and each releases one water molecule."},
+{k:"mcq",q:"Why can't humans digest cellulose?",o:["Our enzymes can't break its β-glycosidic bonds","Cellulose isn't made of glucose","Cellulose is a kind of lipid","It dissolves too quickly"],e:"Amylase only breaks the α-linkages in starch. Cows and termites rely on gut microbes that make cellulase."},
+{k:"tf",q:"Unsaturated fatty acids contain at least one C=C double bond.",a:true,e:"The double bond puts a kink in the chain, so the molecules can't pack tightly and the fat stays liquid at room temperature."},
+{k:"mcq",q:"Glycogen is more branched than amylose. How does that help animals?",o:["Glucose can be released fast, because enzymes work on many chain ends at once","It makes glycogen dissolve in fat","It lets glycogen build cell walls","It lets glycogen store water"],e:"More branches means more ends for enzymes to nibble, which suits animals that need quick energy."},
+{k:"mcq",q:"In a cell membrane, which part of each phospholipid faces the watery surroundings?",o:["The phosphate head","The fatty acid tails","Both ends equally","No part; it avoids water entirely"],e:"The tails hide in the middle of the bilayer, away from water, while the heads face the watery inside and outside of the cell."}]},
+{id:"proteins",t:"Proteins and nucleic acids",cards:[
+["Amino acids","Every amino acid has a central carbon carrying an amino group (–NH₂), a carboxyl group (–COOH), a hydrogen and an R group. The 20 R groups differ in size, charge and polarity, and that variety is what makes proteins so versatile. A condensation reaction joins two amino acids with a peptide bond."],
+["Four levels of structure","Primary structure is the amino acid sequence. Secondary structure is α-helices and β-pleated sheets held by hydrogen bonds along the backbone. Tertiary structure is the whole 3D fold, held by hydrogen bonds, ionic bonds, disulfide bridges and hydrophobic clustering between R groups. Quaternary structure is several chains working together, like the four in haemoglobin."],
+["Shape is function","Heat, extreme pH and some chemicals break the bonds that hold the fold, so the protein denatures and stops working; the peptide bonds survive. Changing a single amino acid can change the shape too, as in sickle cell haemoglobin, where glutamic acid is swapped for valine."],
+["Nucleic acids","A nucleotide is a five-carbon sugar, a phosphate and a nitrogenous base. DNA uses deoxyribose and the bases A, T, G and C; it is double-stranded and stores information. RNA uses ribose and has U in place of T; it is usually single-stranded and carries out instructions. Purines (A, G) have two rings; pyrimidines (C, T, U) have one."]],
+qs:[
+{k:"mcq",q:"Which part differs between the 20 amino acids?",o:["The R group","The amino group","The carboxyl group","The central carbon"],e:"The other three parts are the same in every amino acid; only the R group changes."},
+{k:"mcq",q:"An α-helix is an example of which level of protein structure?",o:["Secondary","Primary","Tertiary","Quaternary"],e:"It's held by hydrogen bonds between backbone groups four amino acids apart."},
+{k:"num",q:"How many peptide bonds are in a single polypeptide of 150 amino acids?",a:149,tol:0.01,unit:"bonds",show:"149",e:"Each bond joins two neighbours, so a chain of n amino acids has n − 1 peptide bonds."},
+{k:"mcq",q:"Boiling an egg denatures its proteins. Which bonds stay intact?",o:["Peptide bonds","Hydrogen bonds","Ionic bonds between R groups","Hydrophobic interactions"],e:"Denaturing destroys the fold, not the sequence. Breaking peptide bonds needs hydrolysis, for example by digestive enzymes."},
+{k:"mcq",q:"Which is found in RNA but not in DNA?",o:["Uracil","Thymine","Deoxyribose","Phosphate"],e:"Both have phosphate. DNA has thymine and deoxyribose; RNA has uracil and ribose."},
+{k:"tf",q:"Disulfide bridges form between the R groups of two cysteines.",a:true,e:"These strong covalent links stabilise many secreted proteins, such as insulin and antibodies."},
+{k:"ord",q:"Order the levels of protein structure, from simplest to most complex.",o:["Amino acid sequence (primary)","Helices and sheets (secondary)","Whole 3D fold (tertiary)","Several chains together (quaternary)"],e:"Each level depends on the one before it: the sequence decides how the chain folds."}]}]},
+{name:"Cells and genes",short:"Cells",tag:"F2",f:1,ls:[
+{id:"cells",t:"Cell types and organelles",cards:[
+["Prokaryotes and eukaryotes","Prokaryotes (bacteria and archaea) have no nucleus. Their DNA is a circular chromosome in the cytoplasm, often with small plasmids, and they have smaller 70S ribosomes and usually a cell wall. They are about 1–10 µm long. Eukaryotic cells are typically 10–100 µm, with a nucleus, membrane-bound organelles and 80S ribosomes."],
+["The protein route","Ribosomes on the rough ER make proteins destined for membranes or for export. Vesicles carry them to the Golgi apparatus, which modifies and sorts them, then on to the cell membrane. Smooth ER makes lipids and steroids. Lysosomes digest worn-out parts and engulfed material with hydrolytic enzymes."],
+["Energy organelles","Mitochondria carry out aerobic respiration and make most of the cell's ATP. Chloroplasts in plants and algae carry out photosynthesis. Both have two membranes, their own circular DNA and 70S ribosomes, which supports the endosymbiotic theory that they descend from bacteria engulfed long ago."],
+["Plant vs animal cells","Plant cells add a cellulose cell wall, chloroplasts and a large permanent vacuole that keeps the cell firm. Animal cells have no wall, have centrioles, and store carbohydrate as glycogen rather than starch."]],
+qs:[
+{k:"mcq",q:"Which structure is found in both prokaryotic and eukaryotic cells?",o:["Ribosomes","A nucleus","Mitochondria","A Golgi apparatus"],e:"Every cell needs to make proteins. Prokaryotic ribosomes are smaller (70S) than eukaryotic ones (80S)."},
+{k:"ord",q:"Order the route of a protein made for secretion.",o:["Made by ribosomes on the rough ER","Carried in a vesicle to the Golgi","Modified and packaged in the Golgi","Vesicle fuses with the cell membrane and releases it"],e:"Insulin leaves pancreatic cells by this route."},
+{k:"mcq",q:"Which evidence supports the endosymbiotic theory?",o:["Mitochondria have their own circular DNA and 70S ribosomes","Mitochondria are found in all prokaryotes","Mitochondria have a cellulose wall","Mitochondria are made by the Golgi"],e:"These features look bacterial. Mitochondria also divide by themselves, much like bacteria do."},
+{k:"mcq",q:"A cell has a cell wall, ribosomes and a circular chromosome but no nucleus. It is most likely…",o:["A bacterium","A plant cell","A fungal cell","An animal cell"],e:"No nucleus means prokaryote. Plant and fungal cells have walls too, but they also have a nucleus."},
+{k:"tf",q:"Animal cells have a cell wall made of cellulose.",a:false,e:"Animal cells have only a cell membrane. Plants have cellulose walls; fungi have chitin."},
+{k:"mcq",q:"Which organelle uses hydrolytic enzymes to break down worn-out organelles?",o:["Lysosome","Ribosome","Smooth ER","Nucleolus"],e:"Its enzymes work best at the acidic pH inside it, about 4.5–5."},
+{k:"fill",q:"Most ATP from aerobic respiration is made in which organelle?",a:["mitochondrion","mitochondria","mitochondrium"],show:"The mitochondrion",e:"Glycolysis happens in the cytoplasm, but the Krebs cycle and electron transport chain are in mitochondria."}]},
+{id:"scale",t:"Microscopes and cell size",cards:[
+["Units","1 mm = 1000 µm, and 1 µm = 1000 nm. Most animal cells are 10–30 µm across, bacteria about 1–5 µm, ribosomes about 20–30 nm, and most viruses 20–300 nm."],
+["Magnification","Magnification = image size ÷ actual size. Convert both to the same unit first. A 20 µm cell drawn 40 mm wide is magnified 40,000 µm ÷ 20 µm = ×2000."],
+["Resolution","Resolution is the smallest distance at which two points can still be told apart. Light microscopes resolve about 0.2 µm, so they show nuclei but not ribosomes. Electron microscopes resolve well below 1 nm, but samples must be dead and in a vacuum. Magnifying beyond the resolution only gives a bigger blur."],
+["Surface area to volume","As a cell grows, its volume rises faster than its surface area. A 1 cm cube has a ratio of 6:1; a 2 cm cube, 24:8, or 3:1. Less membrane per unit of volume means slower exchange, which is one reason cells stay small and large animals need lungs, gills and blood vessels."]],
+qs:[
+{k:"num",q:"A cell 25 µm wide appears 50 mm wide in a photo. What is the magnification?",a:2000,tol:0.5,unit:"×",show:"×2000",e:"50 mm = 50,000 µm. 50,000 ÷ 25 = 2000."},
+{k:"num",q:"Under ×400 magnification, an image of a cell is 8 mm long. How long is the actual cell?",a:20,tol:0.01,unit:"µm",show:"20 µm",e:"8 mm = 8000 µm. 8000 ÷ 400 = 20 µm."},
+{k:"num",q:"A cube has 3 cm sides. Its surface area to volume ratio is x:1. What is x?",a:2,tol:0.01,show:"2 (54 : 27)",e:"Surface area = 6 × 3² = 54 cm². Volume = 3³ = 27 cm³. 54 ÷ 27 = 2."},
+{k:"mcq",q:"Why can't a light microscope show ribosomes, even at ×2000?",o:["Ribosomes are smaller than its resolution limit","Ribosomes block electrons","Light destroys ribosomes","Ribosomes move too fast to see"],e:"Ribosomes are about 25 nm across, far below the 0.2 µm (200 nm) limit."},
+{k:"tf",q:"Electron microscopes can be used to watch living cells move.",a:false,e:"Samples are fixed, dried or frozen and put in a vacuum. Light microscopes are the ones that show living cells."},
+{k:"mcq",q:"Which of these is smallest?",o:["A ribosome","A bacterium","A red blood cell","A nucleus"],e:"Ribosome ~25 nm, bacterium ~2 µm, nucleus ~6 µm, red blood cell ~7.5 µm."},
+{k:"num",q:"How many nanometres are in 1 mm?",a:1000000,tol:0.5,unit:"nm",show:"1,000,000 nm",e:"1 mm = 1000 µm, and each µm is 1000 nm: 1000 × 1000 = 1,000,000."}]},
+{id:"genes",t:"Chromosomes, genes and alleles",cards:[
+["The vocabulary","A gene is a length of DNA that codes for a protein or functional RNA, at a fixed position (locus) on a chromosome. Alleles are different versions of the same gene. Your genotype is the alleles you carry; your phenotype is the trait you show."],
+["Haploid and diploid","Human body cells are diploid (2n = 46): 23 pairs of homologous chromosomes, one of each pair from each parent. Gametes are haploid (n = 23), and fertilisation restores the diploid number. Homologues carry the same genes in the same order, but possibly different alleles."],
+["Mitosis and meiosis","Mitosis makes two genetically identical diploid cells, for growth and repair. Meiosis makes four genetically different haploid gametes through two divisions. Variation comes from crossing over, independent assortment of homologues, and random fertilisation."],
+["Punnett squares","A dominant allele shows when one copy is present (written as a capital, A). A recessive allele shows only when there are two copies (aa). Crossing two heterozygotes (Aa × Aa) gives 1 AA : 2 Aa : 1 aa, which is a 3:1 ratio of dominant to recessive phenotypes."]],
+qs:[
+{k:"mcq",q:"Different versions of the same gene are called…",o:["Alleles","Loci","Homologues","Chromatids"],e:"For example, the gene for ABO blood group has three common alleles: Iᴬ, Iᴮ and i."},
+{k:"num",q:"A dog's body cells have 78 chromosomes. How many are in each of its sperm cells?",a:39,tol:0.01,unit:"chromosomes",show:"39",e:"Gametes are haploid: 78 ÷ 2 = 39."},
+{k:"mcq",q:"Aa × aa. What fraction of offspring show the recessive phenotype?",o:["1/2","1/4","3/4","0"],e:"Half the offspring get a from the Aa parent, and all get a from the aa parent."},
+{k:"tf",q:"Mitosis produces genetically identical cells.",a:true,e:"Barring rare copying mistakes, both daughter cells get exact copies of every chromosome."},
+{k:"mcq",q:"Which of these does NOT create genetic variation in sexual reproduction?",o:["Mitosis in body cells","Crossing over","Independent assortment","Random fertilisation"],e:"The other three all happen during meiosis or fertilisation and shuffle alleles."},
+{k:"mcq",q:"A person with genotype Bb is described as…",o:["Heterozygous","Homozygous dominant","Homozygous recessive","Haploid"],e:"Hetero means different: the two alleles differ."},
+{k:"num",q:"Two Aa parents have 4 children. On average, how many show the recessive phenotype?",a:1,tol:0.01,unit:"children",show:"1",e:"Each child has a 1/4 chance of being aa, so 4 × 1/4 = 1 on average. Real families vary."}]}]},
+{name:"Energy and enzymes",short:"Energy",tag:"F3",f:1,ls:[
+{id:"enzbasic",t:"How enzymes work",cards:[
+["Biological catalysts","Enzymes are mostly proteins that speed up reactions without being used up. The substrate binds to the active site, forming an enzyme–substrate complex. The lock-and-key model says the site fits exactly; the induced-fit model, now preferred, says the site changes shape slightly as the substrate binds."],
+["Temperature","Warming speeds reactions because molecules collide more often and with more energy. Past the optimum, about 37 °C for many human enzymes, the bonds holding the active site break, the enzyme denatures and the rate falls quickly. Cold slows enzymes but doesn't denature them."],
+["pH and concentration","Each enzyme has an optimum pH: pepsin in the stomach works best near pH 2, trypsin in the small intestine near pH 8. Adding substrate speeds the reaction until every active site is busy; after that, the amount of enzyme limits the rate."],
+["Inhibitors and helpers","Competitive inhibitors look like the substrate and block the active site; adding more substrate overcomes them. Non-competitive inhibitors bind elsewhere and change the site's shape. Many enzymes need cofactors such as metal ions, or coenzymes, organic helpers often made from vitamins (NAD⁺ comes from niacin)."]],
+qs:[
+{k:"mcq",q:"Why does reaction rate drop sharply above an enzyme's optimum temperature?",o:["The active site changes shape as the enzyme denatures","Substrate molecules move too slowly","The enzyme gets used up","New peptide bonds form"],e:"The substrate no longer fits. Unlike cooling, this damage usually can't be undone."},
+{k:"mcq",q:"Pepsin, a stomach enzyme, works best at about…",o:["pH 2","pH 7","pH 8","pH 12"],e:"The stomach is very acidic. Trypsin, in the small intestine, prefers about pH 8."},
+{k:"tf",q:"An enzyme is used up by the reaction it catalyses.",a:false,e:"It is released unchanged and can work again, thousands of times per second for some enzymes."},
+{k:"mcq",q:"Adding more substrate no longer speeds up a reaction. What is limiting the rate now?",o:["The amount of enzyme, since every active site is busy","The substrate concentration","The amount of product","Nothing; the rate is at zero"],e:"Adding more enzyme would raise the rate again."},
+{k:"mcq",q:"An inhibitor's effect disappears when lots of substrate is added. It is most likely…",o:["Competitive","Non-competitive","A denaturing agent","A cofactor"],e:"Substrate and inhibitor compete for the same active site, so enough substrate wins."},
+{k:"fill",q:"The region of an enzyme where the substrate binds is called the ___ site.",a:["active","active site"],show:"Active site",e:"Its shape and charges match the substrate."},
+{k:"mcq",q:"Compared with the lock-and-key model, the induced-fit model says…",o:["The active site changes shape slightly as the substrate binds","Enzymes are not proteins","Any substrate fits any enzyme","The substrate changes the enzyme permanently"],e:"The small change in shape strains the substrate's bonds, helping the reaction along."}]},
+{id:"atp",t:"ATP and energy in cells",cards:[
+["ATP","ATP (adenosine triphosphate) is adenine, ribose and three phosphate groups. Hydrolysing the last phosphate gives ADP + Pi and releases energy that cells can use. ATP isn't a long-term store: your body recycles roughly its own weight in ATP every day."],
+["Coupling","Exergonic reactions release energy; endergonic reactions need it. Cells drive endergonic work, such as muscle contraction, active transport and building proteins, by coupling it to ATP hydrolysis, often by passing the phosphate to another molecule."],
+["Redox","Oxidation is losing electrons, often along with hydrogen; reduction is gaining them (OIL RIG). In respiration, glucose is oxidised and oxygen is reduced. The carriers NAD⁺ and FAD pick up electrons and hydrogen, becoming NADH and FADH₂, and deliver them to the electron transport chain."],
+["Where ATP comes from","Substrate-level phosphorylation makes a little ATP directly, in glycolysis and the Krebs cycle. Most ATP comes from oxidative phosphorylation in mitochondria. Plants also make ATP in chloroplasts by photophosphorylation."]],
+qs:[
+{k:"mcq",q:"Hydrolysis of ATP produces…",o:["ADP and inorganic phosphate","AMP and glucose","ADP and oxygen","Adenine and ribose only"],e:"Water splits off the third phosphate. Cells then rebuild ATP from ADP + Pi."},
+{k:"mcq",q:"Which of these directly needs ATP?",o:["Active transport by the Na⁺/K⁺ pump","Diffusion of O₂","Osmosis","Facilitated diffusion"],e:"The other three move substances down their gradients, so they need no energy input."},
+{k:"tf",q:"Reduction means gaining electrons.",a:true,e:"OIL RIG: Oxidation Is Loss, Reduction Is Gain."},
+{k:"mcq",q:"NAD⁺ becomes NADH when it…",o:["Is reduced, gaining electrons and hydrogen","Is oxidised","Loses a phosphate","Binds ATP"],e:"NADH then carries those electrons to the electron transport chain."},
+{k:"fill",q:"Which sugar is in ATP?",a:["ribose","d-ribose"],show:"Ribose",e:"The same five-carbon sugar is in RNA. DNA uses deoxyribose."},
+{k:"mcq",q:"Why is ATP a poor long-term energy store?",o:["Cells keep only a little of it and recycle it constantly; fat and glycogen store energy instead","It holds no energy","It doesn't dissolve in water","Only plants can make it"],e:"ATP works like spending money. Fat and glycogen are the savings account."},
+{k:"mcq",q:"An exergonic reaction…",o:["Releases energy","Needs an input of energy","Never needs an enzyme","Only happens in plants"],e:"Exergonic reactions can still be slow; enzymes speed them up by lowering activation energy."}]},
+{id:"respbasic",t:"Respiration and photosynthesis basics",cards:[
+["Aerobic respiration","C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O, with the energy released captured as ATP. Glycolysis happens in the cytoplasm; the link reaction, Krebs cycle and electron transport chain happen in mitochondria. Oxygen is the final electron acceptor."],
+["Without oxygen","Anaerobic respiration runs only glycolysis, making 2 ATP per glucose. To keep glycolysis going, NADH must be recycled to NAD⁺: muscles make lactate, and yeast makes ethanol and CO₂. Lactate travels to the liver, where it is turned back into glucose."],
+["Photosynthesis","6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂, powered by light. Chlorophyll absorbs mostly red and blue light and reflects green. The light-dependent reactions on the thylakoids make ATP and NADPH and release O₂; the light-independent reactions (the Calvin cycle) in the stroma fix CO₂."],
+["Limiting factors","The rate of photosynthesis is set by whichever factor is in shortest supply: light intensity, CO₂ concentration or temperature. Raising a factor that isn't limiting does nothing. Greenhouses add CO₂ and light to push the rate up."]],
+qs:[
+{k:"mcq",q:"Where does glycolysis happen?",o:["Cytoplasm","Mitochondrial matrix","Chloroplast stroma","Nucleus"],e:"That's why even cells without mitochondria, such as red blood cells, can still make ATP."},
+{k:"num",q:"How many ATP does glycolysis make, net, per glucose in anaerobic respiration?",a:2,tol:0.01,unit:"ATP",show:"2",e:"Glycolysis makes 4 ATP but uses 2 to get started, for a net 2."},
+{k:"mcq",q:"Yeast fermentation produces…",o:["Ethanol and CO₂","Lactate","Oxygen","Glucose"],e:"The CO₂ makes bread rise; the ethanol makes beer and wine."},
+{k:"mcq",q:"Chlorophyll looks green because it…",o:["Reflects green light and absorbs red and blue","Absorbs green light best","Gives off green light","Contains green iron"],e:"Green is the light it uses least, so that's what reaches your eyes."},
+{k:"tf",q:"Raising CO₂ concentration always increases the rate of photosynthesis.",a:false,e:"Only if CO₂ is the limiting factor. In dim light, light is limiting and extra CO₂ does nothing."},
+{k:"num",q:"In aerobic respiration, how many O₂ molecules are used per glucose?",a:6,tol:0.01,unit:"O₂",show:"6",e:"C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O."},
+{k:"mcq",q:"The light-dependent reactions supply the Calvin cycle with…",o:["ATP and NADPH","Glucose and O₂","CO₂ and water","Starch"],e:"ATP supplies energy and NADPH supplies electrons to turn CO₂ into sugar."}]}]},
+
+{name:"Molecular biology",short:"Molecular",tag:"1",ls:[
+{id:"dna",t:"DNA structure and replication",cards:[
 ["Two antiparallel strands","DNA is two strands of nucleotides, each made of deoxyribose, a phosphate and a base. The strands run in opposite directions, one 5′→3′ and the other 3′→5′. A pairs with T through two hydrogen bonds; G pairs with C through three."],
 ["Replication is semiconservative","Meselson and Stahl (1958) grew E. coli in heavy ¹⁵N, moved it to ¹⁴N, and followed DNA density. After one generation all DNA was hybrid; after two, half was hybrid and half light. Each new double helix keeps one parental strand."],
 ["At the fork","Helicase unwinds the helix, single-strand binding proteins keep the strands apart, and topoisomerase (DNA gyrase in bacteria) relieves the supercoiling that builds up ahead. Primase lays down a short RNA primer, because DNA polymerase can only add to an existing 3′-OH."],
@@ -187,7 +312,7 @@ qs:[
 {k:"tf",q:"DNA polymerase can start a new strand on bare template, without a primer.",a:false,e:"It needs a 3′-OH to extend. Primase, an RNA polymerase, can start from nothing, which is why every new strand begins with RNA."},
 {k:"fill",q:"In bacteria, which enzyme relieves the positive supercoiling ahead of the replication fork?",a:["gyrase","DNA gyrase","topoisomerase","topoisomerase II","topoisomerase 2","topo II"],show:"DNA gyrase (a type II topoisomerase)",e:"Gyrase cuts both strands, passes DNA through the gap and reseals it, using ATP. Quinolone antibiotics target it."},
 {k:"mcq",q:"Telomerase is best described as…",o:["A reverse transcriptase that carries its own RNA template","A DNA ligase that works only at chromosome ends","An RNA polymerase that lays primers at telomeres","A nuclease that trims the 3′ overhang"],e:"It copies its RNA template into telomere repeats (TTAGGG in humans) on the 3′ overhang. It is active in germ cells, stem cells and most cancers."}]},
-{t:"Transcription and RNA processing",cards:[
+{id:"tx",t:"Transcription and RNA processing",cards:[
 ["Reading the template","RNA polymerase reads the template strand 3′→5′ and builds RNA 5′→3′, with no primer needed. The transcript has the same sequence as the coding (non-template) strand, with U in place of T."],
 ["Promoters","In E. coli, the sigma factor of RNA polymerase recognises two promoter elements: −35 (TTGACA) and −10 (TATAAT, the Pribnow box). In eukaryotes, RNA Pol II can't bind alone. General transcription factors assemble first, with TFIID's TATA-binding protein on the TATA box about 25–30 bp upstream."],
 ["Three eukaryotic polymerases","Pol I makes the large rRNAs (28S, 18S, 5.8S). Pol II makes mRNA plus most snRNAs and miRNAs. Pol III makes tRNA and 5S rRNA. α-amanitin from death cap mushrooms blocks Pol II strongly, Pol III weakly and Pol I barely at all."],
@@ -199,7 +324,7 @@ qs:[
 {k:"mcq",q:"The −10 consensus sequence of an E. coli promoter is…",o:["TATAAT","TTGACA","AAUAAA","AGGAGG"],e:"TTGACA is the −35 element, AAUAAA is the eukaryotic poly(A) signal, and AGGAGG is a Shine–Dalgarno sequence."},
 {k:"mcq",q:"During splicing, the intron is released as a…",o:["Lariat","Circular exon","Poly(A) tail","Okazaki fragment"],e:"The branch-point A attacks the 5′ splice site, making a 2′–5′ bond and a loop. The second step joins the exons and frees the intron lariat."},
 {k:"mcq",q:"A drug blocks 5′ capping of new mRNAs. What do you expect?",o:["The mRNAs are degraded faster and translated poorly","Introns stay in, but translation is normal","RNA Pol II can no longer bind promoters","tRNAs can no longer be charged"],e:"The cap shields mRNA from 5′→3′ exonucleases and is bound by eIF4E to start cap-dependent translation."}]},
-{t:"Translation and the genetic code",cards:[
+{id:"tl",t:"Translation and the genetic code",cards:[
 ["Reading the code","mRNA is read in non-overlapping triplets from a fixed start. Of 64 codons, 61 code for amino acids and 3 are stops: UAA, UAG and UGA. AUG codes for methionine and starts most proteins. The code is redundant (most amino acids have several codons) and nearly universal."],
 ["Charging tRNAs","Aminoacyl-tRNA synthetases attach each amino acid to its tRNAs, using ATP. They do the real decoding; the ribosome only checks codon–anticodon pairing. Wobble at the codon's third position lets one tRNA read more than one codon, as when G at the anticodon's 5′ end pairs with U or C."],
 ["The ribosome","Charged tRNAs enter the A site, the growing chain sits on the tRNA in the P site, and empty tRNAs leave from the E site. Peptide bonds are made by rRNA in the large subunit, so the ribosome is a ribozyme. Bacteria find the start via a Shine–Dalgarno sequence that pairs with 16S rRNA; eukaryotes scan from the cap to the first good AUG."],
@@ -212,8 +337,8 @@ qs:[
 {k:"mcq",q:"Which of these is a stop codon?",o:["UGA","UGG","AUG","UAU"],e:"UGG is Trp, AUG is Met, UAU is Tyr."},
 {k:"fill",q:"Which enzyme attaches an amino acid to the correct tRNA?",a:["aminoacyl-tRNA synthetase","aminoacyl tRNA synthetase","tRNA synthetase","aminoacyl synthetase","aaRS"],show:"Aminoacyl-tRNA synthetase",e:"There is roughly one synthetase per amino acid. Many proofread, removing a wrong amino acid before release."},
 {k:"mcq",q:"A mutation changes the Shine–Dalgarno sequence of a bacterial gene so it no longer pairs with rRNA. What happens?",o:["Translation initiation on that mRNA drops sharply","The protein gets one wrong amino acid","Transcription stops","The mRNA is spliced differently"],e:"Without base pairing to the 3′ end of 16S rRNA, the small subunit can't position the start codon in the P site."}]}]},
-{name:"Gene regulation",short:"Regulation",ls:[
-{t:"Bacterial operons",cards:[
+{name:"Gene regulation",short:"Regulation",tag:"2",ls:[
+{id:"lac",t:"Bacterial operons",cards:[
 ["Operons","Bacteria often group the genes for one pathway under one promoter, so they are transcribed together as one polycistronic mRNA. The operator, a DNA site at the promoter, is where a repressor binds to block RNA polymerase."],
 ["The lac operon","lacZ (β-galactosidase), lacY (permease) and lacA (transacetylase) share one promoter. The LacI repressor, made from its own gene, sits on the operator when lactose is absent. Allolactose, made from lactose, binds the repressor and pulls it off the DNA. This is negative, inducible control."],
 ["Glucose comes first","When glucose is low, cAMP rises. cAMP binds CAP (also called CRP), and CAP–cAMP binds near the lac promoter and helps RNA polymerase attach. So the operon runs strongly only with lactose present and glucose absent. This is positive control."],
@@ -226,7 +351,7 @@ qs:[
 {k:"tf",q:"In the trp operon, tryptophan binds the repressor and lets it bind the operator.",a:true,e:"Tryptophan is the corepressor; TrpR alone binds DNA poorly."},
 {k:"mcq",q:"With plenty of tryptophan, attenuation ends transcription early because…",o:["The ribosome passes the Trp codons quickly, so the 3:4 terminator hairpin forms","The ribosome stalls at the Trp codons, so the 2:3 hairpin forms","TrpR binds the leader peptide","Tryptophan binds RNA polymerase directly"],e:"When Trp is scarce, the ribosome stalls on the Trp codons, region 2 pairs with region 3 instead, and the terminator can't form."},
 {k:"fill",q:"Which protein binds cAMP and activates the lac operon?",a:["CAP","CRP","catabolite activator protein","catabolite gene activator protein","cAMP receptor protein"],show:"CAP (also called CRP)",e:"CAP–cAMP bends the DNA and contacts RNA polymerase, raising transcription about fiftyfold."}]},
-{t:"Eukaryotic gene regulation",cards:[
+{id:"euk",t:"Eukaryotic gene regulation",cards:[
 ["Chromatin","About 147 bp of DNA wraps around a histone octamer (two each of H2A, H2B, H3 and H4) to make a nucleosome. Histone acetylation by HATs neutralises lysine charges and loosens chromatin, which goes with active genes. HDACs remove the acetyl groups and tighten it."],
 ["DNA methylation","In mammals, methyl groups go mostly on cytosines in CpG pairs. Methylated CpG islands at promoters are usually silent. DNMT1 copies the pattern after replication, so it passes to daughter cells."],
 ["Enhancers","Activators bind enhancers that can sit thousands of base pairs away, upstream, downstream or inside an intron, in either orientation. DNA loops bring them to the promoter, where they act through the Mediator complex on RNA Pol II. Most genes respond to a combination of factors."],
@@ -239,7 +364,7 @@ qs:[
 {k:"mcq",q:"In female mammals, one X chromosome is silenced mainly by…",o:["Xist RNA coating the X it is made from","A repressor binding every X-linked promoter","Deleting most of that X","Stripping its histones"],e:"Xist, a long non-coding RNA, spreads in cis and recruits silencing complexes, forming a Barr body."},
 {k:"ord",q:"Order these steps for a eukaryotic protein-coding gene.",o:["Chromatin opens at the promoter","RNA Pol II starts transcription","Introns are spliced out","The mRNA is exported from the nucleus","Ribosomes translate the mRNA"],e:"Splicing happens largely while transcription is still going, but it must finish before export."},
 {k:"mcq",q:"Proteins tagged with a polyubiquitin chain are usually…",o:["Broken down by the 26S proteasome","Sent to the nucleus","Secreted","Made more stable"],e:"Lysine-48-linked chains are the classic degradation signal. Cyclins are destroyed this way each cell cycle."}]},
-{t:"Mutations and DNA repair",cards:[
+{id:"mut",t:"Mutations and DNA repair",cards:[
 ["Point mutations","A silent mutation keeps the same amino acid. Missense swaps one amino acid for another. Nonsense creates a stop codon and cuts the protein short. Inserting or deleting bases in a number not divisible by 3 shifts the reading frame from that point on."],
 ["Where damage comes from","Spontaneous: cytosine deamination (giving uracil), loss of purines, and replication errors. Induced: UV light joins neighbouring pyrimidines into dimers, mostly thymine dimers; base analogues like 5-bromouracil mispair; intercalators like ethidium bromide cause frameshifts."],
 ["Fixing one strand","Mismatch repair fixes replication errors. In E. coli, MutS finds the mismatch and MutH nicks the new strand, which isn't yet methylated at GATC. Base excision repair starts with a glycosylase that removes one damaged base, such as uracil. Nucleotide excision repair cuts out a stretch around bulky lesions like thymine dimers and is defective in xeroderma pigmentosum."],
@@ -252,8 +377,8 @@ qs:[
 {k:"mcq",q:"Cytosine deamination leaves uracil in DNA. Which pathway removes it?",o:["Base excision repair, via uracil-DNA glycosylase","Nucleotide excision repair","Homologous recombination","Mismatch repair using GATC methylation"],e:"The glycosylase cuts out the base, AP endonuclease nicks the backbone, and a polymerase fills the one-base gap."},
 {k:"fill",q:"UV light mainly causes ___ dimers.",a:["thymine","pyrimidine","cyclobutane pyrimidine","thymine dimers","pyrimidine dimers","TT"],show:"Thymine (pyrimidine) dimers",e:"Adjacent pyrimidines on one strand become covalently linked, kinking the helix and blocking polymerases."},
 {k:"mcq",q:"Which double-strand break repair pathway is more error-prone?",o:["Non-homologous end joining","Homologous recombination","Both are equally accurate","Neither, since both use a template"],e:"NHEJ has no template, so small insertions or deletions are common at the join. CRISPR knockouts rely on this."}]}]},
-{name:"Genetics",short:"Genetics",ls:[
-{t:"Mendelian genetics and probability",cards:[
+{name:"Genetics",short:"Genetics",tag:"3",ls:[
+{id:"mendel",t:"Mendelian genetics and probability",cards:[
 ["Segregation and assortment","A diploid carries two alleles of each gene, and they go to different gametes when homologues separate in anaphase I. Genes on different chromosomes assort independently, because each pair of homologues lines up on its own at metaphase I."],
 ["Probability shortcuts","Use the product rule for independent events (this AND that) and the sum rule for mutually exclusive ones (this OR that). From AaBbCc × AaBbCc, the chance of aabbcc is ¼ × ¼ × ¼ = 1/64. Work big crosses one gene at a time."],
 ["Beyond simple dominance","Incomplete dominance gives an intermediate heterozygote (red × white snapdragons give pink, F2 1:2:1). Codominance shows both alleles (IᴬIᴮ is blood type AB). Epistasis bends the 9:3:3:1, to 9:3:4 for recessive epistasis as in Labrador coat colour, or 9:7 when both genes are needed."],
@@ -266,7 +391,7 @@ qs:[
 {k:"num",q:"You expect 3:1 and count 290 tall and 110 short plants. Calculate χ² to two decimals.",a:1.333,tol:0.02,show:"1.33",e:"Expected counts are 300 and 100. (10²/300) + (10²/100) = 0.33 + 1.00 = 1.33."},
 {k:"tf",q:"With χ² = 1.33 and 1 degree of freedom, you reject the 3:1 hypothesis at p = 0.05.",a:false,e:"1.33 is below 3.84, so a deviation this size is likely to be chance."},
 {k:"mcq",q:"Parents are Iᴬi and Iᴮi. What is the chance their child is type O?",o:["1/4","1/2","0","3/4"],e:"Type O needs ii: ½ × ½ = ¼. The other children are A, B or AB, a quarter each."}]},
-{t:"Linkage and gene mapping",cards:[
+{id:"link",t:"Linkage and gene mapping",cards:[
 ["Linked genes","Genes close together on one chromosome tend to travel together into gametes. New allele combinations, called recombinants, appear only when a crossover falls between them in prophase I."],
 ["Map distance","Recombination frequency = recombinant offspring ÷ total offspring. 1% recombination is 1 map unit, or 1 centimorgan (cM). The observed frequency never goes much above 50%, so genes far apart on one chromosome look unlinked."],
 ["Test crosses","Cross the heterozygote with a homozygous recessive. Each offspring's phenotype then shows which gamete came from the heterozygote. The two most common classes are parental; the two rarest are double crossovers."],
@@ -278,7 +403,7 @@ qs:[
 {k:"num",q:"A–B is 10 cM and B–C is 20 cM. Of 1000 offspring, 10 are double crossovers. What is the interference? Give a decimal.",a:0.5,tol:0.01,show:"0.5",e:"Expected doubles = 0.10 × 0.20 × 1000 = 20. Coefficient of coincidence = 10/20 = 0.5, so interference = 1 − 0.5 = 0.5."},
 {k:"tf",q:"If two genes show 50% recombination, they must be on different chromosomes.",a:false,e:"Genes far apart on the same chromosome also give about 50%."},
 {k:"mcq",q:"Crossing over between homologues happens in…",o:["Prophase I","Metaphase I","Anaphase II","S phase"],e:"Homologues synapse and cross over in prophase I, at the pachytene stage."}]},
-{t:"Population genetics",cards:[
+{id:"popgen",t:"Population genetics",cards:[
 ["Hardy–Weinberg","For one gene with two alleles, p + q = 1, and genotype frequencies are p² (AA), 2pq (Aa) and q² (aa). This holds only with no selection, no mutation, no gene flow, random mating and a very large population."],
 ["Using it","For a recessive trait, the share of affected people is q². Take the square root to get q, then 1 − q for p. Carriers are 2pq, close to 2q for rare alleles, so most copies hide in heterozygotes."],
 ["What moves allele frequencies","Natural selection, genetic drift, gene flow and mutation. Drift is strongest in small populations; bottlenecks and founder effects are both drift. Inbreeding raises homozygote frequency but doesn't by itself change allele frequencies."]],
@@ -290,8 +415,8 @@ qs:[
 {k:"tf",q:"Genetic drift has a larger effect in small populations.",a:true,e:"Sampling error in which alleles get passed on is bigger when fewer individuals breed."},
 {k:"mcq",q:"Why does selection remove a rare harmful recessive allele so slowly?",o:["Most copies sit in heterozygotes, where selection can't see them","Mutation adds it faster than selection removes it","Recessive alleles are chemically more stable","Heterozygotes always have higher fitness"],e:"When q = 0.01, there are about 198 heterozygotes for every affected person."},
 {k:"mcq",q:"A few birds colonise an island, and their descendants have unusual allele frequencies. This is…",o:["A founder effect, a type of genetic drift","Gene flow","Natural selection","Hardy–Weinberg equilibrium"],e:"The founders were a small random sample of the source population."}]}]},
-{name:"Cell biology",short:"Cell",ls:[
-{t:"Membranes and transport",cards:[
+{name:"Cell biology",short:"Cell bio",tag:"4",ls:[
+{id:"memb",t:"Membranes and transport",cards:[
 ["Fluid mosaic","Membranes are a phospholipid bilayer with proteins floating in it. Unsaturated fatty acid tails, with their kinks, keep it fluid. Cholesterol acts as a buffer: it makes warm membranes less fluid and stops cold ones from packing solid."],
 ["What gets through alone","Small nonpolar molecules like O₂ and CO₂ cross quickly. Water and small uncharged polar molecules like urea cross slowly. Ions and large polar molecules such as glucose need transport proteins."],
 ["Passive and active transport","Channels and carriers let solutes move down their gradient (facilitated diffusion). Primary active transport spends ATP directly: the Na⁺/K⁺-ATPase pumps 3 Na⁺ out and 2 K⁺ in per ATP. Secondary active transport uses a gradient made by a pump, as SGLT1 uses Na⁺ to pull glucose into gut cells."],
@@ -304,7 +429,7 @@ qs:[
 {k:"mcq",q:"Ouabain blocks the Na⁺/K⁺-ATPase. What happens to SGLT1 glucose uptake over time?",o:["It falls, because the Na⁺ gradient runs down","It rises, because there is more Na⁺ inside","It doesn't change, because SGLT1 doesn't use ATP","It reverses at once and pumps glucose out"],e:"SGLT1 uses no ATP itself, but it depends on the gradient the pump keeps up."},
 {k:"fill",q:"Water channel proteins are called ___.",a:["aquaporin","aquaporins","AQP"],show:"Aquaporins",e:"Peter Agre found them in red blood cells; kidney collecting ducts insert AQP2 in response to ADH."},
 {k:"mcq",q:"Red blood cells go into 0.3% NaCl; blood is about 0.9%. They…",o:["Swell and may burst","Shrink","Stay the same","Turn turgid like plant cells"],e:"The solution is hypotonic, so water flows in. With no wall to push back, the cells can lyse."}]},
-{t:"Cell signalling",cards:[
+{id:"signal",t:"Cell signalling",cards:[
 ["Two kinds of receptor","Hydrophobic signals such as steroid hormones cross the membrane and bind receptors inside the cell, which then act as transcription factors. Hydrophilic signals stay outside and bind surface receptors: G-protein-coupled receptors, receptor tyrosine kinases, or ligand-gated ion channels."],
 ["GPCRs and second messengers","An active GPCR makes its Gα subunit swap GDP for GTP. Gαs turns on adenylyl cyclase, which makes cAMP, which activates protein kinase A. Gαq turns on phospholipase C, which splits PIP₂ into IP₃ (releases Ca²⁺ from the ER) and DAG (activates PKC). Gα switches itself off by hydrolysing GTP."],
 ["RTKs and Ras","Ligand binding makes RTKs pair up and phosphorylate each other's tyrosines. Adaptors like Grb2 bind and bring SOS, which loads Ras with GTP. Ras-GTP starts the MAP kinase chain, Raf → MEK → ERK, which changes gene expression and drives division."],
@@ -317,7 +442,7 @@ qs:[
 {k:"tf",q:"Caffeine inhibits phosphodiesterase, so it would make cAMP signals last longer.",a:true,e:"Less cAMP breakdown means PKA stays active longer. (Caffeine's main effect in the brain is blocking adenosine receptors.)"},
 {k:"mcq",q:"Cancer-causing Ras mutations usually…",o:["Stop Ras from hydrolysing GTP, so it stays on","Stop Ras from binding GTP","Destroy the receptor","Turn Ras into a transcription factor"],e:"Mutations at codon 12, 13 or 61 block GAP-assisted GTP hydrolysis, so the growth signal never ends."},
 {k:"fill",q:"Which enzyme makes cAMP from ATP?",a:["adenylyl cyclase","adenylate cyclase","adenyl cyclase","AC"],show:"Adenylyl cyclase",e:"It is activated by Gαs and inhibited by Gαi."}]},
-{t:"The cell cycle",cards:[
+{id:"cycle",t:"The cell cycle",cards:[
 ["The phases","G1 (growth), S (DNA replication), G2 (preparing to divide), then M: mitosis and cytokinesis. Cells that stop dividing exit to G0. DNA content doubles in S, from 2C to 4C."],
 ["Cyclins and CDKs","Cyclin-dependent kinases work only when bound to a cyclin, and cyclin levels rise and fall each cycle. Cdk1 with cyclin B drives cells into mitosis. The APC/C then tags cyclin B and securin with ubiquitin; securin's destruction frees separase, which cuts cohesin so sister chromatids can part."],
 ["Checkpoints","At the G1/S restriction point, unphosphorylated Rb holds E2F. Cdk4/6–cyclin D phosphorylates Rb and frees E2F to switch on S-phase genes. DNA damage activates p53, which induces p21 to block CDKs. The spindle checkpoint delays anaphase until every kinetochore is attached."],
@@ -330,8 +455,8 @@ qs:[
 {k:"mcq",q:"Nondisjunction in meiosis I gives…",o:["Four abnormal gametes: two n+1 and two n−1","Two normal and two abnormal gametes","Four normal gametes","One abnormal gamete"],e:"Both homologues go to one pole, so every gamete downstream is affected."},
 {k:"tf",q:"Losing p53 lets cells with damaged DNA keep dividing.",a:true,e:"p53 normally pauses the cycle through p21 or triggers apoptosis. It is mutated in about half of human cancers."},
 {k:"mcq",q:"The spindle assembly checkpoint holds a cell in…",o:["Metaphase, until every kinetochore is attached","G1, until the cell is big enough","S phase, until DNA is copied","Telophase, until cytokinesis ends"],e:"Unattached kinetochores send a wait signal that blocks the APC/C."}]}]},
-{name:"Metabolism",short:"Metabolism",ls:[
-{t:"Enzymes and kinetics",cards:[
+{name:"Metabolism",short:"Metabolism",tag:"5",ls:[
+{id:"enz",t:"Enzymes and kinetics",cards:[
 ["What enzymes change","Enzymes lower the activation energy, so reactions reach equilibrium faster. They don't change ΔG or where the equilibrium lies. Substrate binding often reshapes the active site, which is called induced fit."],
 ["Michaelis–Menten","v = Vmax[S] / (Km + [S]). Km is the substrate concentration that gives half of Vmax; a low Km means the enzyme works well at low [S]. A Lineweaver–Burk plot (1/v against 1/[S]) turns the curve into a line with y-intercept 1/Vmax and x-intercept −1/Km."],
 ["Inhibitors","Competitive inhibitors bind the active site: Km rises and Vmax stays, since enough substrate outcompetes them. Pure noncompetitive inhibitors bind elsewhere: Vmax falls and Km stays. Uncompetitive inhibitors bind only the enzyme–substrate complex: both fall."],
@@ -344,7 +469,7 @@ qs:[
 {k:"mcq",q:"An S-shaped (sigmoidal) curve of v against [S] suggests…",o:["Cooperative binding in an allosteric enzyme","Competitive inhibition","A very low Km","Simple Michaelis–Menten kinetics"],e:"Binding at one site makes binding at the others easier, as with haemoglobin and oxygen."},
 {k:"mcq",q:"In feedback inhibition…",o:["A pathway's end product inhibits an early enzyme","A substrate activates the last enzyme","An enzyme breaks down its own product","An inhibitor is added from outside the cell"],e:"Isoleucine inhibiting threonine deaminase is the textbook case."},
 {k:"num",q:"With Km = 4 mM, at what [S] does v reach 80% of Vmax?",a:16,tol:0.05,unit:"mM",show:"16 mM",e:"0.8 = S / (4 + S), so 3.2 + 0.8S = S and S = 16 mM. Going from 50% to 80% of Vmax takes four times the Km."}]},
-{t:"Cellular respiration",cards:[
+{id:"resp",t:"Cellular respiration",cards:[
 ["Glycolysis","In the cytosol, one glucose becomes two pyruvate, for a net 2 ATP and 2 NADH. The key control point is PFK-1: high ATP and citrate slow it, while AMP and fructose-2,6-bisphosphate speed it up."],
 ["Pyruvate oxidation and the citric acid cycle","In the mitochondrial matrix, pyruvate dehydrogenase turns each pyruvate into acetyl-CoA, CO₂ and NADH. Each turn of the citric acid cycle then gives 3 NADH, 1 FADH₂, 1 GTP or ATP, and 2 CO₂."],
 ["Electron transport and chemiosmosis","In the inner membrane, complexes I, III and IV pump H⁺ into the intermembrane space as electrons pass to O₂, which becomes water. H⁺ flowing back through ATP synthase makes ATP: about 2.5 per NADH and 1.5 per FADH₂, roughly 30–32 per glucose."],
@@ -357,7 +482,7 @@ qs:[
 {k:"mcq",q:"Cyanide stops respiration by blocking…",o:["Complex IV (cytochrome c oxidase)","ATP synthase","Complex I","Pyruvate dehydrogenase"],e:"It binds the haem iron in complex IV, so electrons can't reach O₂."},
 {k:"mcq",q:"PFK-1 is inhibited by…",o:["High ATP and citrate","High AMP","Fructose-2,6-bisphosphate","Low ATP"],e:"Plenty of ATP and citrate signal that the cell has enough energy, so glycolysis slows."},
 {k:"mcq",q:"Oligomycin blocks ATP synthase in intact mitochondria. Oxygen use…",o:["Falls, because the H⁺ gradient builds up and slows the pumps","Rises","Is unchanged","Becomes faster than with an uncoupler"],e:"This is respiratory control. Adding an uncoupler afterwards restores O₂ use by giving H⁺ another way back."}]},
-{t:"Photosynthesis",cards:[
+{id:"photo",t:"Photosynthesis",cards:[
 ["Two stages","The light reactions in the thylakoid membranes split water, release O₂, and make ATP and NADPH. The Calvin cycle in the stroma spends that ATP and NADPH to fix CO₂ into sugar."],
 ["The light reactions","Photosystem II (P680) takes electrons from water. They pass through plastoquinone, the cytochrome b₆f complex (which pumps H⁺ into the lumen), plastocyanin, photosystem I (P700) and ferredoxin, and finally reduce NADP⁺ to NADPH. H⁺ flowing out of the lumen through ATP synthase makes ATP. Cyclic flow around PSI makes ATP but no NADPH."],
 ["The Calvin cycle","Rubisco attaches CO₂ to RuBP, giving two 3-phosphoglycerate. ATP and NADPH reduce these to G3P. Most G3P regenerates RuBP; fixing 3 CO₂ yields 1 spare G3P at a cost of 9 ATP and 6 NADPH."],
@@ -379,12 +504,14 @@ const shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.f
 const derange=n=>{const id=[...Array(n).keys()];let b=shuffle(id);let g=0;while(n>1&&g<20&&b.every((v,i)=>v===i)){b=shuffle(id);g++;}return b;};
 const pn=s=>{const t=String(s??'').replace(/[\s,]/g,'').replace(/%$/,'');if(!t)return NaN;if(t.includes('/')){const p=t.split('/');if(p.length!==2||!p[0]||!p[1])return NaN;const x=Number(p[0]),y=Number(p[1]);return y?x/y:NaN;}return Number(t);};
 const Q={},L={};
-U.forEach((u,ui)=>u.ls.forEach((l,li)=>{l.ui=ui;l.li=li;l.id=ui+'-'+li;L[l.id]=l;l.qs.forEach((q,qi)=>{q.id=l.id+'-'+qi;if(q.k==='mcq'&&q.a===undefined)q.a=0;Q[q.id]=q;});}));
+U.forEach((u,ui)=>u.ls.forEach((l,li)=>{l.ui=ui;l.li=li;L[l.id]=l;l.qs.forEach((q,qi)=>{q.id=l.id+'-'+qi;if(q.k==='mcq'&&q.a===undefined)q.a=0;Q[q.id]=q;});}));
+const OLD=['dna','tx','tl','lac','euk','mut','mendel','link','popgen','memb','signal','cycle','enz','resp','photo'];
+const mig=id=>{const m=/^(\d)-(\d)(-\d+)?$/.exec(id);if(!m)return id;const n=OLD[Number(m[1])*3+Number(m[2])];return n?n+(m[3]||''):id;};
 const allL=U.flatMap(u=>u.ls);
 const KEY='karyo-v1';
 const blank=()=>({done:{},review:[],xp:0,days:[]});
 let S=blank(),fresh=null,nextId=null,P=null;
-const fix=o=>{const b=blank();if(o&&typeof o==='object'){if(o.done&&typeof o.done==='object')b.done=o.done;if(Array.isArray(o.review))b.review=o.review;if(typeof o.xp==='number')b.xp=o.xp;if(Array.isArray(o.days))b.days=o.days;}return b;};
+const fix=o=>{const b=blank();if(o&&typeof o==='object'){if(o.done&&typeof o.done==='object')for(const k of Object.keys(o.done))b.done[mig(k)]=o.done[k];if(Array.isArray(o.review))b.review=[...new Set(o.review.map(mig))];if(typeof o.xp==='number')b.xp=o.xp;if(Array.isArray(o.days))b.days=o.days;}return b;};
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
 const fmt=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const streak=()=>{const set=new Set(S.days);const d=new Date();if(!set.has(fmt(d)))d.setDate(d.getDate()-1);let n=0;while(set.has(fmt(d))){n++;d.setDate(d.getDate()-1);}return n;};
@@ -395,20 +522,21 @@ const LABEL={mcq:'Choose one',tf:'True or false?',fill:'Type the answer',num:'En
 
 function drawK(){
   const W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;
-  const narrow=W<520,top=8,lab=46,av=H-top-lab,col=W/U.length,cw=Math.max(18,Math.min(48,col*.36));
-  const hs=[1,.9,.8,.72,.64],cs=[.38,.43,.34,.46,.3];
+  const nf=U.filter(u=>u.f).length,gap=nf&&nf<U.length?.6:0;
+  const top=8,lab=46,av=H-top-lab,col=W/(U.length+gap),cw=Math.max(15,Math.min(46,col*.4)),wide=col>=92;
+  const hs=U.map((_,i)=>1-i*.06),cs=U.map((_,i)=>[.38,.43,.34,.46,.3,.4,.36,.44][i%8]);
   const pMax=Math.max(...hs.map((h,i)=>h*cs[i])),qMax=Math.max(...hs.map((h,i)=>h*(1-cs[i])));
   const k=av/(pMax+qMax),cy=top+pMax*k;
   let defs='',body='';
   U.forEach((u,ui)=>{
-    const x=col*ui+col/2,h=hs[ui]*k,t=cy-h*cs[ui],b=t+h,x0=x-cw/2,r=cw/2;
+    const x=col*(ui+(ui>=nf?gap:0))+col/2,h=hs[ui]*k,t=cy-h*cs[ui],b=t+h,x0=x-cw/2,r=cw/2;
     const pa=`<rect x="${x0}" y="${t}" width="${cw}" height="${cy-t}" rx="${r}"/>`,qa=`<rect x="${x0}" y="${cy}" width="${cw}" height="${b-cy}" rx="${r}"/>`;
     defs+=`<clipPath id="kc${ui}">${pa}${qa}</clipPath>`;
     const bh=Math.max(9,h*.1),pos=[t+(cy-t)*.52,cy+(b-cy)*.33,cy+(b-cy)*.7],deco=[t+(cy-t)*.24,cy+(b-cy)*.12,cy+(b-cy)*.52,cy+(b-cy)*.88];
     let bands=deco.map(y=>`<rect x="${x0}" y="${y-bh*.2}" width="${cw}" height="${bh*.4}" fill="var(--gband)"/>`).join('');
     bands+=u.ls.map((l,li)=>{const c=S.done[l.id]?(fresh===l.id?'kb on fresh':'kb on'):(nextId===l.id?'kb next':'kb');return `<rect class="${c}" x="${x0}" y="${pos[li]-bh/2}" width="${cw}" height="${bh}"/>`;}).join('');
     const dn=u.ls.filter(l=>S.done[l.id]).length;
-    body+=`<g class="chr" data-u="${ui}" tabindex="0" role="button" aria-label="Unit ${ui+1}, ${esc(u.name)}: ${dn} of ${u.ls.length} lessons done"><rect x="${x-col/2}" y="0" width="${col}" height="${H}" fill="transparent"/><g clip-path="url(#kc${ui})"><rect x="${x0}" y="${t}" width="${cw}" height="${h}" fill="var(--chrom)"/>${bands}</g><g fill="none" stroke="var(--ink2)" stroke-width="1.5">${pa}${qa}</g><text class="kn" x="${x}" y="${H-24}">${narrow?ui+1:(ui+1)+' '+esc(u.short)}</text><text class="kd" x="${x}" y="${H-6}">${dn}/${u.ls.length}</text></g>`;
+    body+=`<g class="chr" data-u="${ui}" tabindex="0" role="button" aria-label="Unit ${esc(u.tag)}, ${esc(u.name)}: ${dn} of ${u.ls.length} lessons done"><rect x="${x-col/2}" y="0" width="${col}" height="${H}" fill="transparent"/><g clip-path="url(#kc${ui})"><rect x="${x0}" y="${t}" width="${cw}" height="${h}" fill="var(--chrom)"/>${bands}</g><g fill="none" stroke="var(--ink2)" stroke-width="1.5">${pa}${qa}</g><text class="kn" x="${x}" y="${H-24}">${wide?esc(u.tag+' '+u.short):esc(u.tag)}</text><text class="kd" x="${x}" y="${H-6}">${dn}/${u.ls.length}</text></g>`;
   });
   svg.innerHTML=`<defs>${defs}</defs>${body}`;
 }
@@ -426,7 +554,8 @@ function render(){
   const rv=S.review.filter(id=>Q[id]).length,r=$('#rev');
   r.disabled=!rv;r.innerHTML=`<span class="b1">Review</span><span class="b2">${rv?`${rv} missed ${rv===1?'question':'questions'}`:'Nothing missed yet'}</span>`;
   $('#prac').innerHTML=`<span class="b1">Mixed practice</span><span class="b2">${dn?'10 from lessons you’ve done':'10 from any unit'}</span>`;
-  $('#units').innerHTML=U.map((u,ui)=>`<section class="unit" id="unit-${ui}"><h2><span class="un">${ui+1}</span>${esc(u.name)}</h2><div class="lgrid">${u.ls.map(l=>{const d=S.done[l.id];const sw=d?'sw on':(l.id===nextId?'sw next':'sw');const meta=d?`Done, best ${Math.round(d.best*100)}%. Tap to redo.`:`${l.cards.length} concepts, ${l.qs.length} questions`;return `<button class="lcard" data-l="${l.id}"><span class="${sw}" aria-hidden="true"></span><span><span class="lt">${esc(l.t)}</span><span class="lm">${meta}</span></span></button>`;}).join('')}</div></section>`).join('');
+  const GRP={f:'<div class="grp"><h2>Foundations</h2><p>Pre-university biology and biochemistry, the base the university units build on.</p></div>',u:'<div class="grp"><h2>University level</h2><p>First- and second-year university biology.</p></div>'};
+  $('#units').innerHTML=U.map((u,ui)=>{const lead=ui===0||!U[ui-1].f!==!u.f;return `${lead?GRP[u.f?'f':'u']:''}<section class="unit${lead?' lead':''}" id="unit-${ui}"><h3><span class="un">${esc(u.tag)}</span>${esc(u.name)}</h3><div class="lgrid">${u.ls.map(l=>{const d=S.done[l.id];const sw=d?'sw on':(l.id===nextId?'sw next':'sw');const meta=d?`Done, best ${Math.round(d.best*100)}%. Tap to redo.`:`${l.cards.length} concepts, ${l.qs.length} questions`;return `<button class="lcard" data-l="${l.id}"><span class="${sw}" aria-hidden="true"></span><span><span class="lt">${esc(l.t)}</span><span class="lm">${meta}</span></span></button>`;}).join('')}</div></section>`;}).join('');
   drawK();
 }
 
@@ -504,7 +633,7 @@ function finish(){
 function renderEnd(){
   const title=P.mode==='lesson'?P.l.t:P.mode==='review'?'Review':'Mixed practice';
   let lines='';
-  if(P.mode==='lesson'){const l=P.l;lines+=fresh===l.id?`<p class="cbody">Band ${l.li+1} on chromosome ${l.ui+1} is now stained.</p>`:`<p class="cbody">Your best on this lesson: ${Math.round(S.done[l.id].best*100)}%.</p>`;}
+  if(P.mode==='lesson'){const l=P.l;lines+=fresh===l.id?`<p class="cbody">Band ${l.li+1} on chromosome ${esc(U[l.ui].tag)} is now stained.</p>`:`<p class="cbody">Your best on this lesson: ${Math.round(S.done[l.id].best*100)}%.</p>`;}
   if(P.mode==='review')lines+=`<p class="cbody">${P.cleared} ${P.cleared===1?'question':'questions'} cleared from your review list.</p>`;
   const missed=P.total-P.first;
   if(missed&&P.mode!=='review')lines+=`<p class="cbody">${missed===1?'The one you missed is':`The ${missed} you missed are`} waiting in Review.</p>`;
