@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karyo Biology</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#f7cfdc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#241a3d" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Karyo">
+<meta name="description" content="College biology in short lessons and exercises.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Sora:wght@700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday study app, calm and exact, made for university biology
+   IDEA a stained karyotype: each unit is a chromosome, each lesson a band you stain by finishing it
+   PICTURE five chromosomes drawn large in an eosin-pink field, finished bands in hematoxylin purple
+   COLOUR white ground, eosin pink field, hematoxylin purple ink and bands, deep eosin accent for what is next
+   TYPE Sora 700 display + Inter text
+   LAYOUT title and stats over a full-width karyotype, actions under it, then units as rows of three lessons; phone stacks it all */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#14112a);
+--ink:light-dark(#1d1838,#efeaff);
+--muted:light-dark(#57506f,#b4acd6);
+--ink2:light-dark(#4a3f86,#a99cf0);
+--hema:light-dark(#3b2f99,#a395ff);
+--onhema:light-dark(#ffffff,#14112a);
+--field:light-dark(#f7cfdc,#241a3d);
+--accent:light-dark(#c2185b,#ff7aa8);
+--chrom:light-dark(#fff6f9,#2f2752);
+--pale:light-dark(#e8cfdd,#4a4078);
+--gband:light-dark(#f4e3ec,#3a3163);
+--line:light-dark(#e7dcea,#352d5a);
+--surface:light-dark(#fbf8fd,#1b1734);
+--ok:light-dark(#16794d,#62d69e);
+--bad:light-dark(#c3263f,#ff8396)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.band{padding-block:clamp(22px,4vw,48px);padding-left:max(5vw,16px,env(safe-area-inset-left,0px));padding-right:max(5vw,16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:960px;margin:0 auto}
+.hero{background:var(--field)}
+.hrow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px}
+h1{font:700 40px/1.05 Sora,Inter,system-ui,sans-serif;letter-spacing:-.02em;margin:0;color:var(--hema)}
+.lede{margin:8px 0 0;max-width:46ch}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:14px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--bg);white-space:nowrap}
+.fig{position:relative;height:clamp(230px,34vw,320px);margin:18px 0 14px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.kn{font:700 15px Sora,Inter,system-ui,sans-serif;fill:var(--ink);text-anchor:middle}
+.kd{font:600 13px Inter,system-ui,sans-serif;fill:var(--muted);text-anchor:middle}
+.chr{cursor:pointer}
+.chr:focus{outline:none}
+.chr:focus-visible .kn{fill:var(--accent)}
+.kb{fill:var(--pale)}
+.kb.on{fill:var(--hema)}
+.kb.next{fill:var(--accent)}
+.kb.fresh{animation:stain 1.4s ease-out both}
+@keyframes stain{from{fill:var(--pale)}to{fill:var(--hema)}}
+.ctas{display:grid;gap:10px;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr)}
+.ctas.two{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.btn{border-radius:14px;min-height:56px;padding:10px 16px;border:1.5px solid var(--ink2);background:var(--bg);cursor:pointer;text-align:left;display:flex;flex-direction:column;justify-content:center}
+.btn.primary{background:var(--hema);color:var(--onhema);border-color:var(--hema)}
+.btn:disabled{opacity:.6;cursor:default}
+.b1{font-weight:600}
+.b2{font-size:14px;opacity:.85}
+.unit{padding-block:18px;border-top:1px solid var(--line)}
+.unit:first-child{border-top:0;padding-top:0}
+.unit h2{font:700 22px/1.2 Sora,Inter,system-ui,sans-serif;margin:0 0 12px;display:flex;gap:10px;align-items:center}
+.un{flex:none;display:inline-grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--field);color:var(--hema);font-size:15px}
+.lgrid{display:grid;gap:10px}
+.lcard{text-align:left;display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;padding:14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer}
+.lcard:hover{border-color:var(--ink2)}
+.sw{border-radius:6px;background:var(--pale)}
+.sw.on{background:var(--hema)}
+.sw.next{background:var(--accent)}
+.lt{font-weight:600;display:block;line-height:1.35}
+.lm{font-size:14px;color:var(--muted);display:block;margin-top:4px}
+.note{font-size:14px;color:var(--muted);margin:20px 0 0}
+.player{position:fixed;inset:0;z-index:20;background:var(--bg);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.pin{width:100%;max-width:680px;margin:0 auto}
+.ptop .pin{display:flex;align-items:center;gap:12px;padding:10px 16px}
+.x{flex:none;width:44px;height:44px;border:0;background:transparent;border-radius:12px;cursor:pointer;display:grid;place-items:center}
+.bar{flex:1;height:10px;border-radius:5px;background:var(--pale);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--hema);border-radius:5px;transition:width .3s}
+.count{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stage{overflow-y:auto}
+.stage .pin{padding:14px 16px 28px}
+.lab{font-size:14px;color:var(--muted);margin:0 0 8px;font-weight:600}
+.stage h2{font:700 24px/1.15 Sora,Inter,system-ui,sans-serif;margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
+.cbody{margin:0 0 10px;max-width:62ch}
+.prompt{font-size:19px;font-weight:600;line-height:1.4;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opts.tf{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.opt{text-align:left;padding:13px 16px;min-height:52px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer}
+.opts.tf .opt{text-align:center;font-weight:600}
+.opt.sel,.chip.sel{border-color:var(--hema);background:color-mix(in srgb,var(--hema) 10%,var(--bg))}
+.opt.right,.chip.right,.inp.okb{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--bg))}
+.opt.wrong,.chip.wrong,.inp.badb{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,var(--bg))}
+.opt:disabled,.chip:disabled{cursor:default}
+.inp{font:inherit;font-size:18px;width:100%;height:54px;padding:0 14px;border:1.5px solid var(--ink2);border-radius:14px;background:var(--bg);color:var(--ink)}
+.numrow{display:flex;gap:10px;align-items:center}
+.ul{font-weight:600;white-space:nowrap}
+.hint{font-size:14px;color:var(--muted);margin:8px 0 0}
+.slots{min-height:64px;display:grid;gap:8px;padding:10px;border:1.5px dashed var(--ink2);border-radius:14px;margin-bottom:14px}
+.slots .hint{margin:0;align-self:center}
+.pool{display:grid;gap:8px}
+.chip{text-align:left;display:flex;gap:10px;align-items:baseline;padding:11px 14px;min-height:48px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer}
+.slots .chip{border-color:var(--hema)}
+.chip .n{font-weight:700;color:var(--hema);font-variant-numeric:tabular-nums;flex:none}
+.foot{border-top:1px solid var(--line);background:var(--bg)}
+.foot .pin{padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px))}
+.fb{display:none;max-height:42vh;overflow-y:auto;margin-bottom:12px;padding:12px 14px;border-radius:14px;font-size:16px}
+.fb.ok,.fb.bad{display:block}
+.fb.ok{background:color-mix(in srgb,var(--ok) 13%,var(--bg))}
+.fb.bad{background:color-mix(in srgb,var(--bad) 11%,var(--bg))}
+.fb b{display:block;font-size:17px}
+.fb.ok b{color:var(--ok)}
+.fb.bad b{color:var(--bad)}
+.fb p,.fb .ans{margin:6px 0 0}
+.fb ol{margin:4px 0 0;padding-left:22px}
+#act{width:100%;align-items:center;text-align:center;font-weight:600}
+.end{padding-top:5vh}
+.big{font:700 72px/1 Sora,Inter,system-ui,sans-serif;margin:8px 0 10px;color:var(--hema);font-variant-numeric:tabular-nums}
+.big span{font-size:40px;color:var(--muted)}
+@media(min-width:720px){.lgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){h1{font-size:34px}.ctas,.ctas.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ctas .primary,.ctas.two #rev{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.kb.fresh{animation:none}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="hero band">
+  <div class="wrap">
+    <div class="hrow">
+      <div>
+        <h1>Karyo</h1>
+        <p class="lede">College biology in short lessons. Finish one to stain its band on the chromosomes below.</p>
+      </div>
+      <div class="stats"><span class="pill" id="st-streak">0-day streak</span><span class="pill" id="st-xp">0 XP</span><span class="pill" id="st-done">0 of 15 bands</span></div>
+    </div>
+    <div class="fig"><svg id="karyo" role="group" aria-label="Progress: one chromosome per unit, one band per lesson"></svg></div>
+    <div class="ctas" id="ctas">
+      <button class="btn primary" id="cont"><span class="b1">Start here</span><span class="b2">DNA structure and replication</span></button>
+      <button class="btn" id="rev"><span class="b1">Review</span><span class="b2">Nothing missed yet</span></button>
+      <button class="btn" id="prac"><span class="b1">Mixed practice</span><span class="b2">10 questions</span></button>
+    </div>
+  </div>
+</div>
+<main class="band">
+  <div class="wrap">
+    <div id="units"></div>
+    <p class="note">Progress is saved in this browser on this device only.</p>
+  </div>
+</main>
+<div class="player" id="player" hidden>
+  <div class="ptop"><div class="pin">
+    <button class="x" id="closeP" aria-label="Close lesson"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    <div class="bar"><i id="barFill"></i></div>
+    <span class="count" id="count">1 / 10</span>
+  </div></div>
+  <div class="stage" id="stage"></div>
+  <div class="foot"><div class="pin"><div class="fb" id="fb" aria-live="polite"></div><button class="btn primary" id="act">Continue</button></div></div>
+</div>
+<script>
+{
+const U=[
+{name:"Molecular biology",short:"Molecular",ls:[
+{t:"DNA structure and replication",cards:[
+["Two antiparallel strands","DNA is two strands of nucleotides, each made of deoxyribose, a phosphate and a base. The strands run in opposite directions, one 5′→3′ and the other 3′→5′. A pairs with T through two hydrogen bonds; G pairs with C through three."],
+["Replication is semiconservative","Meselson and Stahl (1958) grew E. coli in heavy ¹⁵N, moved it to ¹⁴N, and followed DNA density. After one generation all DNA was hybrid; after two, half was hybrid and half light. Each new double helix keeps one parental strand."],
+["At the fork","Helicase unwinds the helix, single-strand binding proteins keep the strands apart, and topoisomerase (DNA gyrase in bacteria) relieves the supercoiling that builds up ahead. Primase lays down a short RNA primer, because DNA polymerase can only add to an existing 3′-OH."],
+["Leading, lagging and telomeres","Polymerase builds 5′→3′ only, so the leading strand is made continuously and the lagging strand in Okazaki fragments. In E. coli, Pol III does most synthesis, Pol I swaps primers for DNA, and ligase seals nicks. On linear chromosomes the ends shorten each round unless telomerase, a reverse transcriptase with its own RNA template, extends them."]],
+qs:[
+{k:"mcq",q:"Why does a GC-rich DNA fragment melt at a higher temperature?",o:["G–C pairs have three hydrogen bonds; A–T pairs have two","G and C are both purines, so they are larger","GC-rich DNA has more phosphodiester bonds","G–C pairs are joined by covalent bonds"],e:"The extra hydrogen bond helps, and stacking between neighbouring GC pairs is also stronger. G is a purine but C is a pyrimidine."},
+{k:"num",q:"A double-stranded DNA sample is 22% thymine. What percentage is guanine?",a:28,tol:0.01,unit:"%",show:"28%",e:"Chargaff's rule: A = T = 22%, so G + C = 56% and G = 28%."},
+{k:"mcq",q:"E. coli grown for many generations in ¹⁵N is moved to ¹⁴N. After two generations, a CsCl gradient shows…",o:["One hybrid band and one light band, in equal amounts","One hybrid band only","One heavy band and one light band","One light band only"],e:"Semiconservative copying gives all hybrid after one round, then half hybrid and half light. A conservative model would have shown heavy and light after the first round."},
+{k:"ord",q:"Put the lagging-strand steps in order.",o:["Helicase unwinds the parental DNA","Primase makes a short RNA primer","DNA Pol III extends it into an Okazaki fragment","DNA Pol I replaces the RNA primer with DNA","DNA ligase seals the nick"],e:"Each Okazaki fragment repeats this cycle as the fork opens."},
+{k:"tf",q:"DNA polymerase can start a new strand on bare template, without a primer.",a:false,e:"It needs a 3′-OH to extend. Primase, an RNA polymerase, can start from nothing, which is why every new strand begins with RNA."},
+{k:"fill",q:"In bacteria, which enzyme relieves the positive supercoiling ahead of the replication fork?",a:["gyrase","DNA gyrase","topoisomerase","topoisomerase II","topoisomerase 2","topo II"],show:"DNA gyrase (a type II topoisomerase)",e:"Gyrase cuts both strands, passes DNA through the gap and reseals it, using ATP. Quinolone antibiotics target it."},
+{k:"mcq",q:"Telomerase is best described as…",o:["A reverse transcriptase that carries its own RNA template","A DNA ligase that works only at chromosome ends","An RNA polymerase that lays primers at telomeres","A nuclease that trims the 3′ overhang"],e:"It copies its RNA template into telomere repeats (TTAGGG in humans) on the 3′ overhang. It is active in germ cells, stem cells and most cancers."}]},
+{t:"Transcription and RNA processing",cards:[
+["Reading the template","RNA polymerase reads the template strand 3′→5′ and builds RNA 5′→3′, with no primer needed. The transcript has the same sequence as the coding (non-template) strand, with U in place of T."],
+["Promoters","In E. coli, the sigma factor of RNA polymerase recognises two promoter elements: −35 (TTGACA) and −10 (TATAAT, the Pribnow box). In eukaryotes, RNA Pol II can't bind alone. General transcription factors assemble first, with TFIID's TATA-binding protein on the TATA box about 25–30 bp upstream."],
+["Three eukaryotic polymerases","Pol I makes the large rRNAs (28S, 18S, 5.8S). Pol II makes mRNA plus most snRNAs and miRNAs. Pol III makes tRNA and 5S rRNA. α-amanitin from death cap mushrooms blocks Pol II strongly, Pol III weakly and Pol I barely at all."],
+["Processing pre-mRNA","A 7-methylguanosine cap goes on the 5′ end early in transcription. At the 3′ end, the RNA is cut 10–30 nt past an AAUAAA signal and given a poly(A) tail. The spliceosome, built from snRNPs, removes introns and releases each as a lariat. Alternative splicing lets one gene make several proteins."]],
+qs:[
+{k:"fill",q:"The template strand reads 3′-TACGGATTC-5′. Write the mRNA from 5′ to 3′.",a:["AUGCCUAAG","5AUGCCUAAG3"],show:"5′-AUGCCUAAG-3′",e:"Pair each base (T→A, A→U, C→G, G→C) and keep the strands antiparallel, so the mRNA's 5′ end lines up with the template's 3′ end."},
+{k:"mcq",q:"Which RNA polymerase transcribes tRNA genes in eukaryotes?",o:["RNA Pol III","RNA Pol I","RNA Pol II","Primase"],e:"Pol III also makes 5S rRNA and U6 snRNA."},
+{k:"tf",q:"Bacterial mRNA is normally capped and spliced before translation begins.",a:false,e:"Bacteria have no nucleus, so ribosomes start on the mRNA while it is still being made. 5′ caps and spliceosomal introns are eukaryotic features."},
+{k:"mcq",q:"The −10 consensus sequence of an E. coli promoter is…",o:["TATAAT","TTGACA","AAUAAA","AGGAGG"],e:"TTGACA is the −35 element, AAUAAA is the eukaryotic poly(A) signal, and AGGAGG is a Shine–Dalgarno sequence."},
+{k:"mcq",q:"During splicing, the intron is released as a…",o:["Lariat","Circular exon","Poly(A) tail","Okazaki fragment"],e:"The branch-point A attacks the 5′ splice site, making a 2′–5′ bond and a loop. The second step joins the exons and frees the intron lariat."},
+{k:"mcq",q:"A drug blocks 5′ capping of new mRNAs. What do you expect?",o:["The mRNAs are degraded faster and translated poorly","Introns stay in, but translation is normal","RNA Pol II can no longer bind promoters","tRNAs can no longer be charged"],e:"The cap shields mRNA from 5′→3′ exonucleases and is bound by eIF4E to start cap-dependent translation."}]},
+{t:"Translation and the genetic code",cards:[
+["Reading the code","mRNA is read in non-overlapping triplets from a fixed start. Of 64 codons, 61 code for amino acids and 3 are stops: UAA, UAG and UGA. AUG codes for methionine and starts most proteins. The code is redundant (most amino acids have several codons) and nearly universal."],
+["Charging tRNAs","Aminoacyl-tRNA synthetases attach each amino acid to its tRNAs, using ATP. They do the real decoding; the ribosome only checks codon–anticodon pairing. Wobble at the codon's third position lets one tRNA read more than one codon, as when G at the anticodon's 5′ end pairs with U or C."],
+["The ribosome","Charged tRNAs enter the A site, the growing chain sits on the tRNA in the P site, and empty tRNAs leave from the E site. Peptide bonds are made by rRNA in the large subunit, so the ribosome is a ribozyme. Bacteria find the start via a Shine–Dalgarno sequence that pairs with 16S rRNA; eukaryotes scan from the cap to the first good AUG."],
+["Elongation and termination","In bacteria, EF-Tu·GTP delivers each charged tRNA and EF-G·GTP moves the ribosome along by one codon. At a stop codon no tRNA fits. A release factor binds instead and the chain is cut free from the last tRNA."]],
+qs:[
+{k:"num",q:"How many amino acids are in the peptide made from 5′-GCAUGUUUGGCUAAGC-3′? Start at the first AUG.",a:3,tol:0.01,unit:"amino acids",show:"3",e:"AUG UUU GGC UAA reads Met–Phe–Gly, then UAA stops. A stop codon adds no amino acid."},
+{k:"mcq",q:"A newly arriving aminoacyl-tRNA binds the ribosome's…",o:["A site","P site","E site","Shine–Dalgarno site"],e:"A for aminoacyl, P for peptidyl, E for exit."},
+{k:"mcq",q:"In bacteria, what catalyses peptide bond formation?",o:["23S rRNA in the large subunit","EF-Tu","Aminoacyl-tRNA synthetase","16S rRNA in the small subunit"],e:"The peptidyl transferase centre is made of rRNA; no protein sits close enough to catalyse the reaction."},
+{k:"tf",q:"Each codon is read by its own dedicated tRNA species.",a:false,e:"Wobble pairing at the third position lets one tRNA read several codons, so cells need fewer than 61 tRNAs."},
+{k:"mcq",q:"Which of these is a stop codon?",o:["UGA","UGG","AUG","UAU"],e:"UGG is Trp, AUG is Met, UAU is Tyr."},
+{k:"fill",q:"Which enzyme attaches an amino acid to the correct tRNA?",a:["aminoacyl-tRNA synthetase","aminoacyl tRNA synthetase","tRNA synthetase","aminoacyl synthetase","aaRS"],show:"Aminoacyl-tRNA synthetase",e:"There is roughly one synthetase per amino acid. Many proofread, removing a wrong amino acid before release."},
+{k:"mcq",q:"A mutation changes the Shine–Dalgarno sequence of a bacterial gene so it no longer pairs with rRNA. What happens?",o:["Translation initiation on that mRNA drops sharply","The protein gets one wrong amino acid","Transcription stops","The mRNA is spliced differently"],e:"Without base pairing to the 3′ end of 16S rRNA, the small subunit can't position the start codon in the P site."}]}]},
+{name:"Gene regulation",short:"Regulation",ls:[
+{t:"Bacterial operons",cards:[
+["Operons","Bacteria often group the genes for one pathway under one promoter, so they are transcribed together as one polycistronic mRNA. The operator, a DNA site at the promoter, is where a repressor binds to block RNA polymerase."],
+["The lac operon","lacZ (β-galactosidase), lacY (permease) and lacA (transacetylase) share one promoter. The LacI repressor, made from its own gene, sits on the operator when lactose is absent. Allolactose, made from lactose, binds the repressor and pulls it off the DNA. This is negative, inducible control."],
+["Glucose comes first","When glucose is low, cAMP rises. cAMP binds CAP (also called CRP), and CAP–cAMP binds near the lac promoter and helps RNA polymerase attach. So the operon runs strongly only with lactose present and glucose absent. This is positive control."],
+["The trp operon","The trp operon is repressible. Tryptophan is a corepressor: it binds TrpR, which then binds the operator. A second brake, attenuation, uses a leader peptide with two Trp codons. With plenty of Trp the ribosome moves quickly, a 3:4 terminator hairpin forms, and transcription stops early."]],
+qs:[
+{k:"mcq",q:"When is the lac operon transcribed most strongly?",o:["Lactose present, glucose absent","Lactose present, glucose present","Lactose absent, glucose absent","Lactose absent, glucose present"],e:"Lactose removes the repressor; low glucose raises cAMP so CAP can boost transcription."},
+{k:"mcq",q:"A lacI⁻ mutant makes no working repressor. The operon is…",o:["On all the time, with or without lactose","Never on","On only with lactose","On only with glucose"],e:"It is constitutive. CAP still sets the level, so glucose lowers expression but can't turn it off."},
+{k:"mcq",q:"A lacIˢ mutant repressor can't bind allolactose. The operon is…",o:["Never induced, even with lactose and no glucose","On all the time","Induced normally","Induced only by glucose"],e:"The super-repressor stays on the operator. It is dominant over I⁺ in a partial diploid because it acts on both operators."},
+{k:"mcq",q:"In the partial diploid I⁺ Oᶜ Z⁻ / I⁺ O⁺ Z⁺, β-galactosidase is…",o:["Inducible: made only with lactose","Constitutive: made all the time","Never made","Made only with glucose"],e:"Oᶜ acts only in cis, on the copy it sits next to, and that copy has a broken lacZ. The working lacZ has a normal operator, so it is regulated normally."},
+{k:"tf",q:"In the trp operon, tryptophan binds the repressor and lets it bind the operator.",a:true,e:"Tryptophan is the corepressor; TrpR alone binds DNA poorly."},
+{k:"mcq",q:"With plenty of tryptophan, attenuation ends transcription early because…",o:["The ribosome passes the Trp codons quickly, so the 3:4 terminator hairpin forms","The ribosome stalls at the Trp codons, so the 2:3 hairpin forms","TrpR binds the leader peptide","Tryptophan binds RNA polymerase directly"],e:"When Trp is scarce, the ribosome stalls on the Trp codons, region 2 pairs with region 3 instead, and the terminator can't form."},
+{k:"fill",q:"Which protein binds cAMP and activates the lac operon?",a:["CAP","CRP","catabolite activator protein","catabolite gene activator protein","cAMP receptor protein"],show:"CAP (also called CRP)",e:"CAP–cAMP bends the DNA and contacts RNA polymerase, raising transcription about fiftyfold."}]},
+{t:"Eukaryotic gene regulation",cards:[
+["Chromatin","About 147 bp of DNA wraps around a histone octamer (two each of H2A, H2B, H3 and H4) to make a nucleosome. Histone acetylation by HATs neutralises lysine charges and loosens chromatin, which goes with active genes. HDACs remove the acetyl groups and tighten it."],
+["DNA methylation","In mammals, methyl groups go mostly on cytosines in CpG pairs. Methylated CpG islands at promoters are usually silent. DNMT1 copies the pattern after replication, so it passes to daughter cells."],
+["Enhancers","Activators bind enhancers that can sit thousands of base pairs away, upstream, downstream or inside an intron, in either orientation. DNA loops bring them to the promoter, where they act through the Mediator complex on RNA Pol II. Most genes respond to a combination of factors."],
+["After transcription","Cells also regulate by alternative splicing, mRNA lifespan and microRNAs. A ~22-nt miRNA loaded into RISC pairs with the 3′ UTR of target mRNAs and blocks translation or triggers decay. Proteins can be tagged with ubiquitin and destroyed by the proteasome."]],
+qs:[
+{k:"mcq",q:"Histone acetylation generally…",o:["Loosens chromatin and favours transcription","Tightens chromatin and silences genes","Cuts DNA between nucleosomes","Adds methyl groups to CpG sites"],e:"Acetyl groups remove the positive charge on lysines, weakening their grip on DNA. Bromodomain proteins also bind acetyl-lysine and recruit activators."},
+{k:"tf",q:"An enhancer must sit just upstream of its promoter to work.",a:false,e:"Enhancers work at a distance and in either orientation because the DNA loops."},
+{k:"mcq",q:"A typical animal miRNA represses its target by pairing with…",o:["The 3′ UTR of the mRNA","The promoter DNA","The 5′ cap","The start codon"],e:"Pairing of the seed region (nucleotides 2–8) is usually enough to pick targets."},
+{k:"mcq",q:"In mammals, DNA methylation is found mainly on…",o:["Cytosine in CpG pairs","Adenine in GATC sites","Guanine in TATA boxes","Uracil in mRNA"],e:"Adenine methylation at GATC (Dam) is the E. coli system used in mismatch repair."},
+{k:"mcq",q:"In female mammals, one X chromosome is silenced mainly by…",o:["Xist RNA coating the X it is made from","A repressor binding every X-linked promoter","Deleting most of that X","Stripping its histones"],e:"Xist, a long non-coding RNA, spreads in cis and recruits silencing complexes, forming a Barr body."},
+{k:"ord",q:"Order these steps for a eukaryotic protein-coding gene.",o:["Chromatin opens at the promoter","RNA Pol II starts transcription","Introns are spliced out","The mRNA is exported from the nucleus","Ribosomes translate the mRNA"],e:"Splicing happens largely while transcription is still going, but it must finish before export."},
+{k:"mcq",q:"Proteins tagged with a polyubiquitin chain are usually…",o:["Broken down by the 26S proteasome","Sent to the nucleus","Secreted","Made more stable"],e:"Lysine-48-linked chains are the classic degradation signal. Cyclins are destroyed this way each cell cycle."}]},
+{t:"Mutations and DNA repair",cards:[
+["Point mutations","A silent mutation keeps the same amino acid. Missense swaps one amino acid for another. Nonsense creates a stop codon and cuts the protein short. Inserting or deleting bases in a number not divisible by 3 shifts the reading frame from that point on."],
+["Where damage comes from","Spontaneous: cytosine deamination (giving uracil), loss of purines, and replication errors. Induced: UV light joins neighbouring pyrimidines into dimers, mostly thymine dimers; base analogues like 5-bromouracil mispair; intercalators like ethidium bromide cause frameshifts."],
+["Fixing one strand","Mismatch repair fixes replication errors. In E. coli, MutS finds the mismatch and MutH nicks the new strand, which isn't yet methylated at GATC. Base excision repair starts with a glycosylase that removes one damaged base, such as uracil. Nucleotide excision repair cuts out a stretch around bulky lesions like thymine dimers and is defective in xeroderma pigmentosum."],
+["Double-strand breaks","Non-homologous end joining glues broken ends directly; it is fast but can lose or add bases. Homologous recombination copies the missing sequence from the sister chromatid, so it is accurate but needs S or G2 phase. BRCA1 and BRCA2 work in homologous recombination."]],
+qs:[
+{k:"mcq",q:"A codon changes from UAC (Tyr) to UAA. This is a…",o:["Nonsense mutation","Missense mutation","Silent mutation","Frameshift"],e:"UAA is a stop codon, so the protein ends early."},
+{k:"mcq",q:"Deleting three adjacent bases inside a coding sequence most likely…",o:["Removes one amino acid and keeps the reading frame","Shifts the reading frame","Has no effect on the protein","Always creates a stop codon"],e:"Three bases are one codon's worth. If the deletion spans two codons, one amino acid may also change, but the downstream frame is kept."},
+{k:"mcq",q:"People with xeroderma pigmentosum burn and get skin cancer easily in sunlight because they lack…",o:["Nucleotide excision repair","Mismatch repair","Telomerase","Non-homologous end joining"],e:"Without NER, UV-induced pyrimidine dimers stay in the DNA and cause mutations."},
+{k:"tf",q:"E. coli mismatch repair tells the new strand from the old one by its methylation.",a:true,e:"Dam methylase marks GATC sites a few minutes after replication. Until then the new strand is unmethylated, and MutH nicks it."},
+{k:"mcq",q:"Cytosine deamination leaves uracil in DNA. Which pathway removes it?",o:["Base excision repair, via uracil-DNA glycosylase","Nucleotide excision repair","Homologous recombination","Mismatch repair using GATC methylation"],e:"The glycosylase cuts out the base, AP endonuclease nicks the backbone, and a polymerase fills the one-base gap."},
+{k:"fill",q:"UV light mainly causes ___ dimers.",a:["thymine","pyrimidine","cyclobutane pyrimidine","thymine dimers","pyrimidine dimers","TT"],show:"Thymine (pyrimidine) dimers",e:"Adjacent pyrimidines on one strand become covalently linked, kinking the helix and blocking polymerases."},
+{k:"mcq",q:"Which double-strand break repair pathway is more error-prone?",o:["Non-homologous end joining","Homologous recombination","Both are equally accurate","Neither, since both use a template"],e:"NHEJ has no template, so small insertions or deletions are common at the join. CRISPR knockouts rely on this."}]}]},
+{name:"Genetics",short:"Genetics",ls:[
+{t:"Mendelian genetics and probability",cards:[
+["Segregation and assortment","A diploid carries two alleles of each gene, and they go to different gametes when homologues separate in anaphase I. Genes on different chromosomes assort independently, because each pair of homologues lines up on its own at metaphase I."],
+["Probability shortcuts","Use the product rule for independent events (this AND that) and the sum rule for mutually exclusive ones (this OR that). From AaBbCc × AaBbCc, the chance of aabbcc is ¼ × ¼ × ¼ = 1/64. Work big crosses one gene at a time."],
+["Beyond simple dominance","Incomplete dominance gives an intermediate heterozygote (red × white snapdragons give pink, F2 1:2:1). Codominance shows both alleles (IᴬIᴮ is blood type AB). Epistasis bends the 9:3:3:1, to 9:3:4 for recessive epistasis as in Labrador coat colour, or 9:7 when both genes are needed."],
+["Chi-square test","χ² = Σ(O − E)² / E tests whether counts fit a predicted ratio. Degrees of freedom = number of classes − 1. For 1 df the cut-off at p = 0.05 is 3.84; a smaller value means the data fit the hypothesis well enough."]],
+qs:[
+{k:"num",q:"AaBb × AaBb. What fraction of offspring are A_bb (dominant for A, recessive for b)?",a:0.1875,tol:0.002,show:"3/16",e:"P(A_) = 3/4 and P(bb) = 1/4, so 3/4 × 1/4 = 3/16."},
+{k:"num",q:"AaBbCc × AaBbCc. What fraction of offspring are aabbcc?",a:0.015625,tol:0.0005,show:"1/64",e:"¼ for each gene, multiplied: (¼)³ = 1/64."},
+{k:"mcq",q:"An F2 ratio of 9:7 suggests…",o:["Two genes that are both needed for the trait","Incomplete dominance","Two linked genes","Recessive epistasis, as in Labrador coat colour"],e:"Only A_B_ (9/16) shows the trait; any homozygous recessive blocks it (3 + 3 + 1 = 7). Recessive epistasis gives 9:3:4."},
+{k:"mcq",q:"A woman who carries an X-linked recessive allele has children with an unaffected man. What is the chance that a son is affected?",o:["1/2","1/4","0","1"],e:"A son's X comes from his mother, and half her X chromosomes carry the allele. The chance that a given child is an affected son is 1/4."},
+{k:"num",q:"You expect 3:1 and count 290 tall and 110 short plants. Calculate χ² to two decimals.",a:1.333,tol:0.02,show:"1.33",e:"Expected counts are 300 and 100. (10²/300) + (10²/100) = 0.33 + 1.00 = 1.33."},
+{k:"tf",q:"With χ² = 1.33 and 1 degree of freedom, you reject the 3:1 hypothesis at p = 0.05.",a:false,e:"1.33 is below 3.84, so a deviation this size is likely to be chance."},
+{k:"mcq",q:"Parents are Iᴬi and Iᴮi. What is the chance their child is type O?",o:["1/4","1/2","0","3/4"],e:"Type O needs ii: ½ × ½ = ¼. The other children are A, B or AB, a quarter each."}]},
+{t:"Linkage and gene mapping",cards:[
+["Linked genes","Genes close together on one chromosome tend to travel together into gametes. New allele combinations, called recombinants, appear only when a crossover falls between them in prophase I."],
+["Map distance","Recombination frequency = recombinant offspring ÷ total offspring. 1% recombination is 1 map unit, or 1 centimorgan (cM). The observed frequency never goes much above 50%, so genes far apart on one chromosome look unlinked."],
+["Test crosses","Cross the heterozygote with a homozygous recessive. Each offspring's phenotype then shows which gamete came from the heterozygote. The two most common classes are parental; the two rarest are double crossovers."],
+["Three-point crosses","To find gene order, compare the double crossovers with the parentals: the gene that has switched is in the middle. Coefficient of coincidence = observed ÷ expected double crossovers, and interference = 1 − that coefficient."]],
+qs:[
+{k:"num",q:"A test cross gives 420 AB, 380 ab, 105 Ab and 95 aB. How far apart are A and B?",a:20,tol:0.01,unit:"cM",show:"20 cM",e:"Recombinants are 105 + 95 = 200 of 1000, which is 20%, or 20 cM."},
+{k:"mcq",q:"Two genes are 60 cM apart on one chromosome. In a test cross, recombinants will be about…",o:["50%","60%","40%","0%"],e:"Multiple crossovers between distant genes cancel each other out, so observed recombination tops out near 50%. Long map distances come from adding shorter intervals."},
+{k:"mcq",q:"Parental classes are ABC and abc. The rarest classes are AbC and aBc. Which gene is in the middle?",o:["B","A","C","You can't tell"],e:"Compared with the parentals, only B has switched in the double crossovers, so B lies between A and C."},
+{k:"num",q:"A–B is 10 cM and B–C is 20 cM. Of 1000 offspring, 10 are double crossovers. What is the interference? Give a decimal.",a:0.5,tol:0.01,show:"0.5",e:"Expected doubles = 0.10 × 0.20 × 1000 = 20. Coefficient of coincidence = 10/20 = 0.5, so interference = 1 − 0.5 = 0.5."},
+{k:"tf",q:"If two genes show 50% recombination, they must be on different chromosomes.",a:false,e:"Genes far apart on the same chromosome also give about 50%."},
+{k:"mcq",q:"Crossing over between homologues happens in…",o:["Prophase I","Metaphase I","Anaphase II","S phase"],e:"Homologues synapse and cross over in prophase I, at the pachytene stage."}]},
+{t:"Population genetics",cards:[
+["Hardy–Weinberg","For one gene with two alleles, p + q = 1, and genotype frequencies are p² (AA), 2pq (Aa) and q² (aa). This holds only with no selection, no mutation, no gene flow, random mating and a very large population."],
+["Using it","For a recessive trait, the share of affected people is q². Take the square root to get q, then 1 − q for p. Carriers are 2pq, close to 2q for rare alleles, so most copies hide in heterozygotes."],
+["What moves allele frequencies","Natural selection, genetic drift, gene flow and mutation. Drift is strongest in small populations; bottlenecks and founder effects are both drift. Inbreeding raises homozygote frequency but doesn't by itself change allele frequencies."]],
+qs:[
+{k:"num",q:"Cystic fibrosis affects about 1 in 2,500 births in a population at Hardy–Weinberg equilibrium. What percentage of people are carriers?",a:3.92,tol:0.05,unit:"%",show:"3.92%",e:"q² = 1/2500, so q = 0.02 and p = 0.98. 2pq = 2 × 0.98 × 0.02 = 0.0392, or 3.92%."},
+{k:"num",q:"A population of 200 has 90 AA, 80 Aa and 30 aa. What is p, the frequency of A?",a:0.65,tol:0.005,show:"0.65",e:"Copies of A: 2 × 90 + 80 = 260, out of 400 alleles. 260/400 = 0.65."},
+{k:"num",q:"If p = 0.7, what is the expected frequency of heterozygotes?",a:0.42,tol:0.005,show:"0.42",e:"2pq = 2 × 0.7 × 0.3 = 0.42."},
+{k:"mcq",q:"Inbreeding on its own…",o:["Raises homozygote frequency without changing allele frequencies","Shifts allele frequencies toward the dominant allele","Increases heterozygosity","Has no effect on genotype frequencies"],e:"Relatives share alleles, so their children are more often homozygous. That exposes recessive traits, which selection can then act on."},
+{k:"tf",q:"Genetic drift has a larger effect in small populations.",a:true,e:"Sampling error in which alleles get passed on is bigger when fewer individuals breed."},
+{k:"mcq",q:"Why does selection remove a rare harmful recessive allele so slowly?",o:["Most copies sit in heterozygotes, where selection can't see them","Mutation adds it faster than selection removes it","Recessive alleles are chemically more stable","Heterozygotes always have higher fitness"],e:"When q = 0.01, there are about 198 heterozygotes for every affected person."},
+{k:"mcq",q:"A few birds colonise an island, and their descendants have unusual allele frequencies. This is…",o:["A founder effect, a type of genetic drift","Gene flow","Natural selection","Hardy–Weinberg equilibrium"],e:"The founders were a small random sample of the source population."}]}]},
+{name:"Cell biology",short:"Cell",ls:[
+{t:"Membranes and transport",cards:[
+["Fluid mosaic","Membranes are a phospholipid bilayer with proteins floating in it. Unsaturated fatty acid tails, with their kinks, keep it fluid. Cholesterol acts as a buffer: it makes warm membranes less fluid and stops cold ones from packing solid."],
+["What gets through alone","Small nonpolar molecules like O₂ and CO₂ cross quickly. Water and small uncharged polar molecules like urea cross slowly. Ions and large polar molecules such as glucose need transport proteins."],
+["Passive and active transport","Channels and carriers let solutes move down their gradient (facilitated diffusion). Primary active transport spends ATP directly: the Na⁺/K⁺-ATPase pumps 3 Na⁺ out and 2 K⁺ in per ATP. Secondary active transport uses a gradient made by a pump, as SGLT1 uses Na⁺ to pull glucose into gut cells."],
+["Osmosis","Water moves toward the side with more dissolved solute. In a hypotonic solution, red blood cells swell and can burst, while plant cells turn turgid because the wall pushes back. In a hypertonic solution, animal cells shrink and plant cells plasmolyse."]],
+qs:[
+{k:"mcq",q:"Each cycle of the Na⁺/K⁺-ATPase moves…",o:["3 Na⁺ out and 2 K⁺ in","2 Na⁺ out and 3 K⁺ in","3 Na⁺ in and 2 K⁺ out","1 Na⁺ out and 1 K⁺ in"],e:"One ATP per cycle. Moving charge unevenly makes the pump electrogenic."},
+{k:"mcq",q:"Which crosses a pure lipid bilayer fastest?",o:["O₂","Glucose","Na⁺","Water"],e:"Small and nonpolar wins. Water gets through, but slowly, which is why many cells add aquaporins."},
+{k:"mcq",q:"Glucose uptake into intestinal cells by SGLT1 is…",o:["Secondary active transport (Na⁺ symport)","Simple diffusion","Primary active transport","Facilitated diffusion down the glucose gradient"],e:"Na⁺ flowing down its gradient drags glucose up its own. Glucose then leaves the other side of the cell by GLUT2, passively."},
+{k:"tf",q:"Cholesterol always makes membranes more fluid.",a:false,e:"It lowers fluidity at body temperature and prevents gelling at low temperature."},
+{k:"mcq",q:"Ouabain blocks the Na⁺/K⁺-ATPase. What happens to SGLT1 glucose uptake over time?",o:["It falls, because the Na⁺ gradient runs down","It rises, because there is more Na⁺ inside","It doesn't change, because SGLT1 doesn't use ATP","It reverses at once and pumps glucose out"],e:"SGLT1 uses no ATP itself, but it depends on the gradient the pump keeps up."},
+{k:"fill",q:"Water channel proteins are called ___.",a:["aquaporin","aquaporins","AQP"],show:"Aquaporins",e:"Peter Agre found them in red blood cells; kidney collecting ducts insert AQP2 in response to ADH."},
+{k:"mcq",q:"Red blood cells go into 0.3% NaCl; blood is about 0.9%. They…",o:["Swell and may burst","Shrink","Stay the same","Turn turgid like plant cells"],e:"The solution is hypotonic, so water flows in. With no wall to push back, the cells can lyse."}]},
+{t:"Cell signalling",cards:[
+["Two kinds of receptor","Hydrophobic signals such as steroid hormones cross the membrane and bind receptors inside the cell, which then act as transcription factors. Hydrophilic signals stay outside and bind surface receptors: G-protein-coupled receptors, receptor tyrosine kinases, or ligand-gated ion channels."],
+["GPCRs and second messengers","An active GPCR makes its Gα subunit swap GDP for GTP. Gαs turns on adenylyl cyclase, which makes cAMP, which activates protein kinase A. Gαq turns on phospholipase C, which splits PIP₂ into IP₃ (releases Ca²⁺ from the ER) and DAG (activates PKC). Gα switches itself off by hydrolysing GTP."],
+["RTKs and Ras","Ligand binding makes RTKs pair up and phosphorylate each other's tyrosines. Adaptors like Grb2 bind and bring SOS, which loads Ras with GTP. Ras-GTP starts the MAP kinase chain, Raf → MEK → ERK, which changes gene expression and drives division."],
+["Amplification and off switches","One receptor activates many G proteins, and each enzyme makes many messenger molecules, so a few hormone molecules can change a whole cell. Signals end when phosphodiesterases break down cAMP, phosphatases remove phosphates, and G proteins and Ras hydrolyse their GTP."]],
+qs:[
+{k:"mcq",q:"Cholera toxin stops Gαs from hydrolysing GTP. In gut cells, cAMP…",o:["Stays high","Drops to zero","Is unaffected","Is turned into IP₃"],e:"Gαs stays on, adenylyl cyclase keeps making cAMP, PKA opens CFTR chloride channels, and water follows into the gut."},
+{k:"mcq",q:"IP₃ acts by…",o:["Opening Ca²⁺ channels in the ER membrane","Activating adenylyl cyclase","Phosphorylating tyrosines","Binding DNA"],e:"The released Ca²⁺, together with DAG, activates protein kinase C."},
+{k:"mcq",q:"Receptors for steroid hormones such as cortisol are…",o:["Inside the cell, and act as transcription factors","GPCRs on the cell surface","Receptor tyrosine kinases","Ligand-gated ion channels"],e:"Steroids are lipid-soluble, so they reach receptors in the cytoplasm or nucleus. Effects are slower but last longer."},
+{k:"ord",q:"Put the RTK–Ras pathway in order.",o:["Growth factor binds the RTK","Receptors pair and phosphorylate each other","Grb2 and SOS are recruited","Ras swaps GDP for GTP","Raf, then MEK, then ERK are activated"],e:"Each kinase in the cascade activates many copies of the next, amplifying the signal."},
+{k:"tf",q:"Caffeine inhibits phosphodiesterase, so it would make cAMP signals last longer.",a:true,e:"Less cAMP breakdown means PKA stays active longer. (Caffeine's main effect in the brain is blocking adenosine receptors.)"},
+{k:"mcq",q:"Cancer-causing Ras mutations usually…",o:["Stop Ras from hydrolysing GTP, so it stays on","Stop Ras from binding GTP","Destroy the receptor","Turn Ras into a transcription factor"],e:"Mutations at codon 12, 13 or 61 block GAP-assisted GTP hydrolysis, so the growth signal never ends."},
+{k:"fill",q:"Which enzyme makes cAMP from ATP?",a:["adenylyl cyclase","adenylate cyclase","adenyl cyclase","AC"],show:"Adenylyl cyclase",e:"It is activated by Gαs and inhibited by Gαi."}]},
+{t:"The cell cycle",cards:[
+["The phases","G1 (growth), S (DNA replication), G2 (preparing to divide), then M: mitosis and cytokinesis. Cells that stop dividing exit to G0. DNA content doubles in S, from 2C to 4C."],
+["Cyclins and CDKs","Cyclin-dependent kinases work only when bound to a cyclin, and cyclin levels rise and fall each cycle. Cdk1 with cyclin B drives cells into mitosis. The APC/C then tags cyclin B and securin with ubiquitin; securin's destruction frees separase, which cuts cohesin so sister chromatids can part."],
+["Checkpoints","At the G1/S restriction point, unphosphorylated Rb holds E2F. Cdk4/6–cyclin D phosphorylates Rb and frees E2F to switch on S-phase genes. DNA damage activates p53, which induces p21 to block CDKs. The spindle checkpoint delays anaphase until every kinetochore is attached."],
+["Mitosis and meiosis","Mitosis gives two identical cells. In meiosis I, homologues pair, cross over and separate, halving the chromosome number. In meiosis II, sister chromatids separate. Nondisjunction in meiosis I makes all four gametes abnormal; in meiosis II, two of the four."]],
+qs:[
+{k:"ord",q:"Put the stages of mitosis in order.",o:["Prophase","Prometaphase","Metaphase","Anaphase","Telophase"],e:"Cytokinesis usually overlaps with telophase."},
+{k:"mcq",q:"Unphosphorylated Rb…",o:["Binds E2F and blocks entry into S phase","Activates E2F and pushes cells into S phase","Degrades cyclin B","Cuts cohesin"],e:"Rb is a tumour suppressor. HPV's E7 protein binds Rb and frees E2F."},
+{k:"mcq",q:"Separase cuts…",o:["Cohesin","Cyclin B","Securin","Microtubules"],e:"Securin holds separase back until the APC/C has securin destroyed at the metaphase–anaphase transition."},
+{k:"num",q:"A human cell (2n = 46) is in G2. How many chromatids does it have?",a:92,tol:0.01,unit:"chromatids",show:"92",e:"Each of the 46 chromosomes was copied in S phase into two sister chromatids."},
+{k:"mcq",q:"Nondisjunction in meiosis I gives…",o:["Four abnormal gametes: two n+1 and two n−1","Two normal and two abnormal gametes","Four normal gametes","One abnormal gamete"],e:"Both homologues go to one pole, so every gamete downstream is affected."},
+{k:"tf",q:"Losing p53 lets cells with damaged DNA keep dividing.",a:true,e:"p53 normally pauses the cycle through p21 or triggers apoptosis. It is mutated in about half of human cancers."},
+{k:"mcq",q:"The spindle assembly checkpoint holds a cell in…",o:["Metaphase, until every kinetochore is attached","G1, until the cell is big enough","S phase, until DNA is copied","Telophase, until cytokinesis ends"],e:"Unattached kinetochores send a wait signal that blocks the APC/C."}]}]},
+{name:"Metabolism",short:"Metabolism",ls:[
+{t:"Enzymes and kinetics",cards:[
+["What enzymes change","Enzymes lower the activation energy, so reactions reach equilibrium faster. They don't change ΔG or where the equilibrium lies. Substrate binding often reshapes the active site, which is called induced fit."],
+["Michaelis–Menten","v = Vmax[S] / (Km + [S]). Km is the substrate concentration that gives half of Vmax; a low Km means the enzyme works well at low [S]. A Lineweaver–Burk plot (1/v against 1/[S]) turns the curve into a line with y-intercept 1/Vmax and x-intercept −1/Km."],
+["Inhibitors","Competitive inhibitors bind the active site: Km rises and Vmax stays, since enough substrate outcompetes them. Pure noncompetitive inhibitors bind elsewhere: Vmax falls and Km stays. Uncompetitive inhibitors bind only the enzyme–substrate complex: both fall."],
+["Regulation","Allosteric enzymes have regulatory sites and often give S-shaped curves from cooperativity, as in PFK-1 and aspartate transcarbamoylase. In feedback inhibition, a pathway's end product blocks an early enzyme. Cells also switch enzymes by phosphorylation, or make them as inactive zymogens such as trypsinogen."]],
+qs:[
+{k:"num",q:"An enzyme has Km = 2 mM and Vmax = 100 µmol/min. What is v at [S] = 6 mM?",a:75,tol:0.1,unit:"µmol/min",show:"75 µmol/min",e:"v = 100 × 6 / (2 + 6) = 75."},
+{k:"mcq",q:"A competitive inhibitor…",o:["Raises Km and leaves Vmax unchanged","Lowers Vmax and leaves Km unchanged","Lowers both Km and Vmax","Raises Vmax"],e:"At very high [S] the substrate wins, so Vmax is still reachable."},
+{k:"tf",q:"Enzymes shift the equilibrium toward products.",a:false,e:"They speed up the forward and reverse reactions equally, so the equilibrium position is the same."},
+{k:"mcq",q:"On a Lineweaver–Burk plot, the lines with and without inhibitor cross on the y-axis. The inhibitor is…",o:["Competitive","Pure noncompetitive","Uncompetitive","An allosteric activator"],e:"The same y-intercept means the same 1/Vmax. Noncompetitive lines cross on the x-axis; uncompetitive lines run parallel."},
+{k:"mcq",q:"An S-shaped (sigmoidal) curve of v against [S] suggests…",o:["Cooperative binding in an allosteric enzyme","Competitive inhibition","A very low Km","Simple Michaelis–Menten kinetics"],e:"Binding at one site makes binding at the others easier, as with haemoglobin and oxygen."},
+{k:"mcq",q:"In feedback inhibition…",o:["A pathway's end product inhibits an early enzyme","A substrate activates the last enzyme","An enzyme breaks down its own product","An inhibitor is added from outside the cell"],e:"Isoleucine inhibiting threonine deaminase is the textbook case."},
+{k:"num",q:"With Km = 4 mM, at what [S] does v reach 80% of Vmax?",a:16,tol:0.05,unit:"mM",show:"16 mM",e:"0.8 = S / (4 + S), so 3.2 + 0.8S = S and S = 16 mM. Going from 50% to 80% of Vmax takes four times the Km."}]},
+{t:"Cellular respiration",cards:[
+["Glycolysis","In the cytosol, one glucose becomes two pyruvate, for a net 2 ATP and 2 NADH. The key control point is PFK-1: high ATP and citrate slow it, while AMP and fructose-2,6-bisphosphate speed it up."],
+["Pyruvate oxidation and the citric acid cycle","In the mitochondrial matrix, pyruvate dehydrogenase turns each pyruvate into acetyl-CoA, CO₂ and NADH. Each turn of the citric acid cycle then gives 3 NADH, 1 FADH₂, 1 GTP or ATP, and 2 CO₂."],
+["Electron transport and chemiosmosis","In the inner membrane, complexes I, III and IV pump H⁺ into the intermembrane space as electrons pass to O₂, which becomes water. H⁺ flowing back through ATP synthase makes ATP: about 2.5 per NADH and 1.5 per FADH₂, roughly 30–32 per glucose."],
+["Poisons, uncouplers, fermentation","Cyanide blocks complex IV. Oligomycin blocks ATP synthase. Uncouplers like DNP, or UCP1 in brown fat, let H⁺ leak back: O₂ use rises, ATP output falls, and the energy becomes heat. Without O₂, fermentation to lactate or ethanol only regenerates NAD⁺ so glycolysis can keep going."]],
+qs:[
+{k:"mcq",q:"In eukaryotes, the citric acid cycle runs in the…",o:["Mitochondrial matrix","Cytosol","Intermembrane space","Outer membrane"],e:"One enzyme, succinate dehydrogenase, is embedded in the inner membrane, where it doubles as complex II."},
+{k:"num",q:"How many NADH does one glucose yield in total, counting glycolysis, pyruvate oxidation and the citric acid cycle?",a:10,tol:0.01,unit:"NADH",show:"10",e:"2 from glycolysis + 2 from pyruvate oxidation + 6 from two turns of the cycle = 10, plus 2 FADH₂."},
+{k:"mcq",q:"Adding the uncoupler DNP to mitochondria makes…",o:["O₂ use rise and ATP synthesis fall","O₂ use stop and ATP synthesis rise","Both stop","Both rise"],e:"The proton gradient leaks away, so electron transport speeds up with nothing to hold it back, but ATP synthase has little to work with."},
+{k:"tf",q:"Fermentation makes extra ATP beyond what glycolysis gives.",a:false,e:"It only turns NADH back into NAD⁺; the ATP still comes from glycolysis."},
+{k:"mcq",q:"Cyanide stops respiration by blocking…",o:["Complex IV (cytochrome c oxidase)","ATP synthase","Complex I","Pyruvate dehydrogenase"],e:"It binds the haem iron in complex IV, so electrons can't reach O₂."},
+{k:"mcq",q:"PFK-1 is inhibited by…",o:["High ATP and citrate","High AMP","Fructose-2,6-bisphosphate","Low ATP"],e:"Plenty of ATP and citrate signal that the cell has enough energy, so glycolysis slows."},
+{k:"mcq",q:"Oligomycin blocks ATP synthase in intact mitochondria. Oxygen use…",o:["Falls, because the H⁺ gradient builds up and slows the pumps","Rises","Is unchanged","Becomes faster than with an uncoupler"],e:"This is respiratory control. Adding an uncoupler afterwards restores O₂ use by giving H⁺ another way back."}]},
+{t:"Photosynthesis",cards:[
+["Two stages","The light reactions in the thylakoid membranes split water, release O₂, and make ATP and NADPH. The Calvin cycle in the stroma spends that ATP and NADPH to fix CO₂ into sugar."],
+["The light reactions","Photosystem II (P680) takes electrons from water. They pass through plastoquinone, the cytochrome b₆f complex (which pumps H⁺ into the lumen), plastocyanin, photosystem I (P700) and ferredoxin, and finally reduce NADP⁺ to NADPH. H⁺ flowing out of the lumen through ATP synthase makes ATP. Cyclic flow around PSI makes ATP but no NADPH."],
+["The Calvin cycle","Rubisco attaches CO₂ to RuBP, giving two 3-phosphoglycerate. ATP and NADPH reduce these to G3P. Most G3P regenerates RuBP; fixing 3 CO₂ yields 1 spare G3P at a cost of 9 ATP and 6 NADPH."],
+["Photorespiration, C4 and CAM","Rubisco also reacts with O₂, starting wasteful photorespiration, which gets worse in heat when stomata close. C4 plants such as maize first fix CO₂ with PEP carboxylase in mesophyll cells, then release it around Rubisco in bundle-sheath cells. CAM plants like cacti open their stomata at night and store CO₂ as malic acid."]],
+qs:[
+{k:"mcq",q:"The O₂ released by photosynthesis comes from…",o:["Water","CO₂","Glucose","RuBP"],e:"Experiments with ¹⁸O-labelled water in 1941 showed the label ends up in the O₂."},
+{k:"num",q:"How many ATP does the Calvin cycle use to make one net G3P?",a:9,tol:0.01,unit:"ATP",show:"9",e:"Fixing 3 CO₂ takes 6 ATP to make 1,3-bisphosphoglycerate and 3 more to regenerate RuBP, plus 6 NADPH."},
+{k:"mcq",q:"In the light, H⁺ concentration in a chloroplast is highest in the…",o:["Thylakoid lumen","Stroma","Cytosol","Intermembrane space"],e:"Water splitting and the b₆f complex both add H⁺ to the lumen, which can drop to about pH 5."},
+{k:"mcq",q:"C4 and CAM plants both concentrate CO₂ for Rubisco. How do they differ?",o:["C4 separates the steps between cell types; CAM separates them between night and day","C4 uses only Rubisco; CAM uses only PEP carboxylase","C4 plants have no Calvin cycle","CAM plants fix CO₂ only in bundle-sheath cells"],e:"Both use PEP carboxylase first and Rubisco second. CAM trades growth speed for water saving."},
+{k:"tf",q:"Cyclic electron flow around photosystem I produces NADPH.",a:false,e:"Electrons go from ferredoxin back to the b₆f complex, so it pumps H⁺ and makes ATP only."},
+{k:"mcq",q:"Rubisco joins CO₂ to…",o:["Ribulose-1,5-bisphosphate (RuBP)","Phosphoenolpyruvate (PEP)","Glyceraldehyde-3-phosphate","Oxaloacetate"],e:"The six-carbon product splits at once into two 3-phosphoglycerate."},
+{k:"mcq",q:"The herbicide DCMU blocks electron transfer from PSII to plastoquinone. In treated leaves in the light…",o:["O₂ release and NADPH production both stop","O₂ release continues, but NADPH stops","Only the Calvin cycle stops","Electron flow through PSII speeds up"],e:"PSII can't pass its electrons on, so it stops splitting water, and nothing reaches PSI to reduce NADP⁺."}]}]}
+];
+/*END DATA*/
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s??'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+const derange=n=>{const id=[...Array(n).keys()];let b=shuffle(id);let g=0;while(n>1&&g<20&&b.every((v,i)=>v===i)){b=shuffle(id);g++;}return b;};
+const pn=s=>{const t=String(s??'').replace(/[\s,]/g,'').replace(/%$/,'');if(!t)return NaN;if(t.includes('/')){const p=t.split('/');if(p.length!==2||!p[0]||!p[1])return NaN;const x=Number(p[0]),y=Number(p[1]);return y?x/y:NaN;}return Number(t);};
+const Q={},L={};
+U.forEach((u,ui)=>u.ls.forEach((l,li)=>{l.ui=ui;l.li=li;l.id=ui+'-'+li;L[l.id]=l;l.qs.forEach((q,qi)=>{q.id=l.id+'-'+qi;if(q.k==='mcq'&&q.a===undefined)q.a=0;Q[q.id]=q;});}));
+const allL=U.flatMap(u=>u.ls);
+const KEY='karyo-v1';
+const blank=()=>({done:{},review:[],xp:0,days:[]});
+let S=blank(),fresh=null,nextId=null,P=null;
+const fix=o=>{const b=blank();if(o&&typeof o==='object'){if(o.done&&typeof o.done==='object')b.done=o.done;if(Array.isArray(o.review))b.review=o.review;if(typeof o.xp==='number')b.xp=o.xp;if(Array.isArray(o.days))b.days=o.days;}return b;};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const fmt=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const streak=()=>{const set=new Set(S.days);const d=new Date();if(!set.has(fmt(d)))d.setDate(d.getDate()-1);let n=0;while(set.has(fmt(d))){n++;d.setDate(d.getDate()-1);}return n;};
+const markDay=()=>{const t=fmt(new Date());if(!S.days.includes(t)){S.days.push(t);S.days=S.days.slice(-400);}};
+const nextLesson=()=>allL.find(l=>!S.done[l.id])||null;
+const svg=$('#karyo'),stage=$('#stage'),fb=$('#fb'),act=$('#act');
+const LABEL={mcq:'Choose one',tf:'True or false?',fill:'Type the answer',num:'Enter a number',ord:'Tap the steps in order'};
+
+function drawK(){
+  const W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;
+  const narrow=W<520,top=8,lab=46,av=H-top-lab,col=W/U.length,cw=Math.max(18,Math.min(48,col*.36));
+  const hs=[1,.9,.8,.72,.64],cs=[.38,.43,.34,.46,.3];
+  const pMax=Math.max(...hs.map((h,i)=>h*cs[i])),qMax=Math.max(...hs.map((h,i)=>h*(1-cs[i])));
+  const k=av/(pMax+qMax),cy=top+pMax*k;
+  let defs='',body='';
+  U.forEach((u,ui)=>{
+    const x=col*ui+col/2,h=hs[ui]*k,t=cy-h*cs[ui],b=t+h,x0=x-cw/2,r=cw/2;
+    const pa=`<rect x="${x0}" y="${t}" width="${cw}" height="${cy-t}" rx="${r}"/>`,qa=`<rect x="${x0}" y="${cy}" width="${cw}" height="${b-cy}" rx="${r}"/>`;
+    defs+=`<clipPath id="kc${ui}">${pa}${qa}</clipPath>`;
+    const bh=Math.max(9,h*.1),pos=[t+(cy-t)*.52,cy+(b-cy)*.33,cy+(b-cy)*.7],deco=[t+(cy-t)*.24,cy+(b-cy)*.12,cy+(b-cy)*.52,cy+(b-cy)*.88];
+    let bands=deco.map(y=>`<rect x="${x0}" y="${y-bh*.2}" width="${cw}" height="${bh*.4}" fill="var(--gband)"/>`).join('');
+    bands+=u.ls.map((l,li)=>{const c=S.done[l.id]?(fresh===l.id?'kb on fresh':'kb on'):(nextId===l.id?'kb next':'kb');return `<rect class="${c}" x="${x0}" y="${pos[li]-bh/2}" width="${cw}" height="${bh}"/>`;}).join('');
+    const dn=u.ls.filter(l=>S.done[l.id]).length;
+    body+=`<g class="chr" data-u="${ui}" tabindex="0" role="button" aria-label="Unit ${ui+1}, ${esc(u.name)}: ${dn} of ${u.ls.length} lessons done"><rect x="${x-col/2}" y="0" width="${col}" height="${H}" fill="transparent"/><g clip-path="url(#kc${ui})"><rect x="${x0}" y="${t}" width="${cw}" height="${h}" fill="var(--chrom)"/>${bands}</g><g fill="none" stroke="var(--ink2)" stroke-width="1.5">${pa}${qa}</g><text class="kn" x="${x}" y="${H-24}">${narrow?ui+1:(ui+1)+' '+esc(u.short)}</text><text class="kd" x="${x}" y="${H-6}">${dn}/${u.ls.length}</text></g>`;
+  });
+  svg.innerHTML=`<defs>${defs}</defs>${body}`;
+}
+
+function render(){
+  const nx=nextLesson();nextId=nx?nx.id:null;
+  const sk=streak(),dn=allL.filter(l=>S.done[l.id]).length;
+  $('#st-streak').textContent=`${sk}-day streak`;
+  $('#st-xp').textContent=`${S.xp} XP`;
+  $('#st-done').textContent=`${dn} of ${allL.length} bands`;
+  const c=$('#cont');
+  if(nx){c.innerHTML=`<span class="b1">${dn?'Continue':'Start here'}</span><span class="b2">${esc(nx.t)}</span>`;c.dataset.go='lesson';}
+  else{c.innerHTML='<span class="b1">Mixed practice</span><span class="b2">10 questions from every unit</span>';c.dataset.go='practice';}
+  $('#prac').hidden=!nx;$('#ctas').classList.toggle('two',!nx);
+  const rv=S.review.filter(id=>Q[id]).length,r=$('#rev');
+  r.disabled=!rv;r.innerHTML=`<span class="b1">Review</span><span class="b2">${rv?`${rv} missed ${rv===1?'question':'questions'}`:'Nothing missed yet'}</span>`;
+  $('#prac').innerHTML=`<span class="b1">Mixed practice</span><span class="b2">${dn?'10 from lessons you’ve done':'10 from any unit'}</span>`;
+  $('#units').innerHTML=U.map((u,ui)=>`<section class="unit" id="unit-${ui}"><h2><span class="un">${ui+1}</span>${esc(u.name)}</h2><div class="lgrid">${u.ls.map(l=>{const d=S.done[l.id];const sw=d?'sw on':(l.id===nextId?'sw next':'sw');const meta=d?`Done, best ${Math.round(d.best*100)}%. Tap to redo.`:`${l.cards.length} concepts, ${l.qs.length} questions`;return `<button class="lcard" data-l="${l.id}"><span class="${sw}" aria-hidden="true"></span><span><span class="lt">${esc(l.t)}</span><span class="lm">${meta}</span></span></button>`;}).join('')}</div></section>`).join('');
+  drawK();
+}
+
+function qBody(st){
+  const q=st.q,ch=P.checked;
+  if(q.k==='mcq'){st.order=st.order||shuffle(q.o.map((_,i)=>i));return `<div class="opts">${st.order.map(i=>{let c='opt';if(P.sel===i)c+=' sel';if(ch&&i===q.a)c+=' right';else if(ch&&P.sel===i)c+=' wrong';return `<button class="${c}" data-i="${i}"${ch?' disabled':''}>${esc(q.o[i])}</button>`;}).join('')}</div>`;}
+  if(q.k==='tf')return `<div class="opts tf">${[true,false].map(v=>{let c='opt';if(P.sel===v)c+=' sel';if(ch&&v===q.a)c+=' right';else if(ch&&P.sel===v)c+=' wrong';return `<button class="${c}" data-tf="${v?1:0}"${ch?' disabled':''}>${v?'True':'False'}</button>`;}).join('')}</div>`;
+  if(q.k==='fill')return `<input id="ans" class="inp" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer" value="${esc(P.sel||'')}">`;
+  if(q.k==='num')return `<div class="numrow"><input id="ans" class="inp" type="text" inputmode="decimal" autocomplete="off" aria-label="Your answer" value="${esc(P.sel||'')}">${q.unit?`<span class="ul">${esc(q.unit)}</span>`:''}</div><p class="hint">Decimals or fractions such as 3/16 both work.</p>`;
+  st.pool=st.pool||derange(q.o.length);
+  const placed=P.sel;
+  const slots=placed.length?placed.map((oi,k)=>{let c='chip';if(ch)c+=oi===k?' right':' wrong';return `<button class="${c}" data-k="${k}"${ch?' disabled':''}><span class="n">${k+1}</span><span>${esc(q.o[oi])}</span></button>`;}).join(''):'<p class="hint">Tap a step below to place it here.</p>';
+  const rest=st.pool.filter(oi=>!placed.includes(oi)).map(oi=>`<button class="chip" data-o="${oi}"><span>${esc(q.o[oi])}</span></button>`).join('');
+  return `<div class="slots">${slots}</div><div class="pool">${rest}</div>${placed.length&&!ch?'<p class="hint">Tap a placed step to take it back.</p>':''}`;
+}
+const has=()=>{const q=P.steps[P.i].q;if(q.k==='mcq'||q.k==='tf')return P.sel!==null;if(q.k==='ord')return P.sel.length===q.o.length;if(q.k==='num')return !isNaN(pn(P.sel));return norm(P.sel)!=='';};
+const upd=()=>{if(P&&!P.checked&&!P.end)act.disabled=!has();};
+function grade(q,s){
+  if(q.k==='mcq'||q.k==='tf')return s===q.a;
+  if(q.k==='fill')return q.a.some(x=>norm(x)===norm(s));
+  if(q.k==='num'){const v=pn(s);return Math.abs(v-q.a)<=(q.tol??Math.abs(q.a)*.005)+1e-12;}
+  return s.length===q.o.length&&s.every((v,i)=>v===i);
+}
+function ansText(q){
+  if(q.k==='mcq')return esc(q.o[q.a]);
+  if(q.k==='tf')return q.a?'True':'False';
+  if(q.k==='fill')return esc(q.show||q.a[0]);
+  if(q.k==='num')return esc(q.show||String(q.a));
+  return '<ol>'+q.o.map(x=>`<li>${esc(x)}</li>`).join('')+'</ol>';
+}
+
+function begin(p){
+  P=Object.assign({i:0,first:0,xp:0,cleared:0,seen:new Set(),checked:false,sel:null,end:false},p);
+  P.total=P.steps.filter(s=>s.t==='q').length;
+  $('#player').hidden=false;document.documentElement.style.overflow='hidden';
+  prep();renderStep();act.focus({preventScroll:true});
+}
+function prep(){const st=P.steps[P.i];P.checked=false;P.sel=st&&st.t==='q'&&st.q.k==='ord'?[]:null;}
+function renderStep(){
+  const n=P.steps.length;
+  $('#barFill').style.width=(P.end?100:P.i/n*100)+'%';
+  $('#count').textContent=P.end?`${n} / ${n}`:`${P.i+1} / ${n}`;
+  fb.className='fb';fb.innerHTML='';
+  if(P.end){renderEnd();return;}
+  const st=P.steps[P.i];
+  if(st.t==='card'){
+    stage.innerHTML=`<div class="pin"><p class="lab">Concept ${st.ci+1} of ${P.l.cards.length}</p><h2>${esc(st.c[0])}</h2><p class="cbody">${esc(st.c[1])}</p></div>`;
+    act.textContent='Continue';act.disabled=false;
+  }else{
+    stage.innerHTML=`<div class="pin"><p class="lab">${st.retry?'One more try':LABEL[st.q.k]}</p><p class="prompt">${esc(st.q.q)}</p><div class="qbody">${qBody(st)}</div></div>`;
+    act.textContent='Check';upd();
+  }
+  stage.scrollTop=0;
+}
+function check(){
+  const st=P.steps[P.i],q=st.q,ok=grade(q,P.sel),first=!P.seen.has(q.id);
+  P.checked=true;P.seen.add(q.id);
+  if(ok&&first){P.first++;P.xp+=P.mode==='review'?5:10;}
+  if(ok&&P.mode==='review'){const b=S.review.length;S.review=S.review.filter(x=>x!==q.id);if(S.review.length<b)P.cleared++;}
+  if(!ok){if(!S.review.includes(q.id))S.review.push(q.id);if(P.mode==='lesson'&&!st.retry)P.steps.push({t:'q',q,retry:true});}
+  save();
+  if(q.k==='fill'||q.k==='num'){const i=$('#ans');if(i){i.disabled=true;i.classList.add(ok?'okb':'badb');}}
+  else $('.qbody').innerHTML=qBody(st);
+  fb.className='fb '+(ok?'ok':'bad');
+  fb.innerHTML=`<b>${ok?(st.retry?'Got it this time':'Correct'):'Not quite'}</b>${ok?'':`<div class="ans">Answer: ${ansText(q)}</div>`}${q.e?`<p>${esc(q.e)}</p>`:''}${!ok&&P.mode==='lesson'&&!st.retry?'<p>You’ll see this one again at the end of the lesson.</p>':''}`;
+  act.textContent='Continue';act.disabled=false;
+  $('#count').textContent=`${P.i+1} / ${P.steps.length}`;
+}
+function next(){P.i++;if(P.i>=P.steps.length){finish();return;}prep();renderStep();}
+function finish(){
+  P.end=true;
+  if(P.mode==='lesson'){const id=P.l.id,prev=S.done[id],sc=P.total?P.first/P.total:1;if(!prev)fresh=id;S.done[id]={best:Math.max(sc,prev?prev.best:0)};}
+  S.xp+=P.xp;markDay();save();renderStep();
+}
+function renderEnd(){
+  const title=P.mode==='lesson'?P.l.t:P.mode==='review'?'Review':'Mixed practice';
+  let lines='';
+  if(P.mode==='lesson'){const l=P.l;lines+=fresh===l.id?`<p class="cbody">Band ${l.li+1} on chromosome ${l.ui+1} is now stained.</p>`:`<p class="cbody">Your best on this lesson: ${Math.round(S.done[l.id].best*100)}%.</p>`;}
+  if(P.mode==='review')lines+=`<p class="cbody">${P.cleared} ${P.cleared===1?'question':'questions'} cleared from your review list.</p>`;
+  const missed=P.total-P.first;
+  if(missed&&P.mode!=='review')lines+=`<p class="cbody">${missed===1?'The one you missed is':`The ${missed} you missed are`} waiting in Review.</p>`;
+  stage.innerHTML=`<div class="pin end"><p class="lab">${esc(title)}</p><p class="big">${P.first}<span> / ${P.total}</span></p><p class="cbody">right on the first try, +${P.xp} XP</p>${lines}</div>`;
+  act.textContent='Back to map';act.disabled=false;
+}
+function closeP(){
+  const ended=P&&P.end;
+  $('#player').hidden=true;document.documentElement.style.overflow='';P=null;
+  render();
+  if(ended)window.scrollTo(0,0);
+  if(fresh)setTimeout(()=>{fresh=null;},1600);
+}
+function openLesson(id){const l=L[id];if(!l)return;begin({mode:'lesson',l,steps:[...l.cards.map((c,ci)=>({t:'card',c,ci})),...l.qs.map(q=>({t:'q',q}))]});}
+function openReview(){const ids=S.review.filter(id=>Q[id]).slice(0,10);if(!ids.length)return;begin({mode:'review',steps:ids.map(id=>({t:'q',q:Q[id]}))});}
+function openPractice(){let pool=allL.filter(l=>S.done[l.id]);if(!pool.length)pool=allL;begin({mode:'practice',steps:shuffle(pool.flatMap(l=>l.qs)).slice(0,10).map(q=>({t:'q',q}))});}
+const goUnit=u=>{const el=document.getElementById('unit-'+u);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});};
+
+act.addEventListener('click',()=>{if(!P)return;if(P.end){closeP();return;}const st=P.steps[P.i];if(st.t==='card'||P.checked){next();return;}if(has())check();});
+stage.addEventListener('click',e=>{
+  if(!P||P.end||P.checked)return;const st=P.steps[P.i];if(st.t!=='q')return;
+  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+  if(d.i!==undefined)P.sel=Number(d.i);
+  else if(d.tf!==undefined)P.sel=d.tf==='1';
+  else if(d.o!==undefined)P.sel.push(Number(d.o));
+  else if(d.k!==undefined)P.sel.splice(Number(d.k),1);
+  else return;
+  $('.qbody').innerHTML=qBody(st);upd();
+});
+stage.addEventListener('input',e=>{if(e.target.id==='ans'&&P&&!P.checked){P.sel=e.target.value;upd();}});
+stage.addEventListener('keydown',e=>{if(e.target.id==='ans'&&e.key==='Enter'){e.preventDefault();act.click();}});
+document.addEventListener('keydown',e=>{if(!P)return;if(e.key==='Escape')closeP();else if(e.key==='Enter'&&e.target===document.body)act.click();});
+$('#closeP').addEventListener('click',closeP);
+$('#cont').addEventListener('click',()=>{if($('#cont').dataset.go==='practice')openPractice();else{const n=nextLesson();if(n)openLesson(n.id);}});
+$('#rev').addEventListener('click',openReview);
+$('#prac').addEventListener('click',openPractice);
+$('#units').addEventListener('click',e=>{const b=e.target.closest('[data-l]');if(b)openLesson(b.dataset.l);});
+svg.addEventListener('click',e=>{const g=e.target.closest('.chr');if(g)goUnit(g.dataset.u);});
+svg.addEventListener('keydown',e=>{const g=e.target.closest('.chr');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();goUnit(g.dataset.u);}});
+
+window.claude?.hot?.snapshot?.(()=>S);
+const kro=new ResizeObserver(drawK);
+const start=d=>{try{const raw=localStorage.getItem(KEY);if(raw)S=fix(JSON.parse(raw));}catch(e){}if(d&&d.done)S=fix(d);render();kro.observe(svg);};
+window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+}
+</script>
+<script>
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>
